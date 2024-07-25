@@ -68,7 +68,7 @@ int main(){
 
     float expected2= a21 + c21;
     std::cout<<"Expected Result: "<<static_cast<float>(expected2)<<std::endl;
-    std::cout<<"GPU result at C[0]: "<<static_cast<float>(mw.C[0])<<std::endl;
+    //std::cout<<"GPU result at C[0]: "<<static_cast<float>(mw.C[0])<<std::endl;
 
 
 
