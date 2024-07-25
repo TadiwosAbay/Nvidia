@@ -72,6 +72,26 @@ int main(){
 
 ////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+    const binary16_t a13 = __float2half(ldexpf(1.0f, -8));
+    const binary16_t b13 = __float2half(ldexpf(1.0f, -7));
+
+    //std::cout << "c21 without any change: " << __half2float(c21) << std::endl;
+  //std::cout << "c21: " << __half2float(c21) << std::endl;
+    mw.reset_host_matrices();
+
+    mw.A[0]=a13;
+    mw.B[0]=b13;
+    //mw.C[0]=c21;
+    mw.run_mfma_kernel();
+    print_matrix(mw.C, M, N, true);
+
+
+    float expected= a13*b13;
+    std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
+
+////////////////////////////////////////////
+
 
 
 
