@@ -167,7 +167,7 @@ int main(){
 
 
     float expected4= a41*a41+a41*b41+a41*b41+a41*b41;
-    std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
+    std::cout<<"Expected Result: "<<static_cast<float>(expected4)<<std::endl;
 
 ////////////////////////////////////////////
 
