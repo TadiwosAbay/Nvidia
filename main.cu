@@ -152,10 +152,10 @@ int main(){
   //std::cout << "c21: " << __half2float(c21) << std::endl;
     mw.reset_host_matrices();
 
-    mw.A[0]=a11;
-    mw.A[1]=a11;
-    mw.A[2]=a11;
-    mw.A[3]=a11;
+    mw.A[0]=a41;
+    mw.A[1]=a41;
+    mw.A[2]=a41;
+    mw.A[3]=a41;
     mw.B[0]=a11;
     mw.B[1]=b41;
     mw.B[2]=b41;
@@ -166,7 +166,7 @@ int main(){
     print_matrix(mw.C, M, N, false);
 
 
-    float expected4= a11*a11+a11*b41+a11*b41+a11*b41;
+    float expected4= a41*a41+a41*b41+a41*b41+a41*b41;
     std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
 
 ////////////////////////////////////////////
