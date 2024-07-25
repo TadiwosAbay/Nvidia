@@ -67,8 +67,8 @@ int main(){
     print_matrix(mw.C, M, N, true);
 
 
-    float expected2= a11*b11;
-    std::cout<<"Expected Result: "<<static_cast<float>(expected2)<<std::endl;
+    float expected= a11*b11;
+    std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
 
 ////////////////////////////////////////////
 
