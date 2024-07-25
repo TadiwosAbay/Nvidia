@@ -55,7 +55,7 @@ int main(){
   //std::cout << "a11: " << __half2float(a11) << std::endl;
   //const float16_t c21=static_cast<float16_t>(-1*(1/(1<<2)));
 
-    std::cout << "c21 without any change: " << c21 << std::endl;
+    std::cout << "c21 without any change: " << __half2float(c21) << std::endl;
   //std::cout << "c21: " << __half2float(c21) << std::endl;
     mw.reset_host_matrices();
 
