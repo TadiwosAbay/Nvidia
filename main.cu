@@ -131,5 +131,48 @@ int main(){
 
 
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    const binary16_t a41 = __float2half(1);
+    const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
+    //const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
+
+    //const binary16_t b11 = __float2half(1.0f/(1<<15));
+
+    //const binary16_t a21=static_cast<binary16_t>(1.0);
+    //const binary16_t b21=static_cast<binary16_t>(1.0);
+    //float c21_float = -1.0f * (1.0f / (1 << 11));
+    //binary16_t c21 = __float2half(c21_float);
+
+    // Display the values (Note: __half cannot be directly printed)
+  //std::cout << "a11: " << __half2float(a11) << std::endl;
+  //const float16_t c21=static_cast<float16_t>(-1*(1/(1<<2)));
+
+    //std::cout << "c21 without any change: " << __half2float(c21) << std::endl;
+  //std::cout << "c21: " << __half2float(c21) << std::endl;
+    mw.reset_host_matrices();
+
+    mw.A[0]=a11;
+    mw.A[1]=a11;
+    mw.A[2]=a11;
+    mw.A[3]=a11;
+    mw.B[0]=a11;
+    mw.B[1]=b41;
+    mw.B[2]=b41;
+    mw.b[3]=b41;
+    mw.run_mfma_kernel();
+    print_matrix(mw.A, M, N, false);
+    print_matrix(mw.B, M, N, false);
+    print_matrix(mw.C, M, N, false);
+
+
+    float expected4= a11*a11+a11*b41+a11*b41+a11*b41;
+    std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
+
+////////////////////////////////////////////
+
+
+
+
     return 0;
 }
