@@ -88,7 +88,7 @@ int main(){
 
 
     float expected3= a13*b13;
-    std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
+    std::cout<<"Expected Result: "<<static_cast<float>(expected3)<<std::endl;
 
 ////////////////////////////////////////////
 
