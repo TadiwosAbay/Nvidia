@@ -42,8 +42,12 @@ int main(){
     mw.run_mfma_kernel();
     //print_matrix(mw.C, M, N, true);
 
-    const binary16_t a21=static_cast<binary16_t>(1.0);
-    const binary16_t b21=static_cast<binary16_t>(1.0);
+
+    const binary16_t a21 = __float2half(1.0f);
+    const binary16_t b21 = __float2half(1.0f);
+
+    //const binary16_t a21=static_cast<binary16_t>(1.0);
+    //const binary16_t b21=static_cast<binary16_t>(1.0);
     float c21_float = -1.0f * (1.0f / (1 << 11));
     binary16_t c21 = __float2half(c21_float);
 
