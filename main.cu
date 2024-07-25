@@ -156,7 +156,7 @@ int main(){
     mw.A[1]=a41;
     mw.A[2]=a41;
     mw.A[3]=a41;
-    mw.B[0]=a11;
+    mw.B[0]=a41;
     mw.B[1]=b41;
     mw.B[2]=b41;
     mw.B[3]=b41;
