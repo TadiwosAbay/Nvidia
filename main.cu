@@ -87,7 +87,7 @@ int main(){
     print_matrix(mw.C, M, N, true);
 
 
-    float expected= a13*b13;
+    float expected3= a13*b13;
     std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
 
 ////////////////////////////////////////////
