@@ -210,8 +210,8 @@ int main(){
     print_matrix(mw.C, M, N, false);
 
 
-    float expected4= a41*a51+a41*b41+a41*b41+a41*b41;
-    std::cout<<"Expected Result: "<<static_cast<float>(expected4)<<std::endl;
+    float expected5= a41*a51+a41*b41+a41*b41+a41*b41;
+    std::cout<<"Expected Result: "<<static_cast<float>(expected5)<<std::endl;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
