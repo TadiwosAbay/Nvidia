@@ -61,15 +61,16 @@ int main(){
     mw.reset_host_matrices();
 
     mw.A[0]=a11;
+    mw.A[1]=a11;
     mw.B[0]=b11;
-    //mw.C[0]=c21;
+    mw.B[1]=b11;
     mw.run_mfma_kernel();
-    print_matrix(mw.A, M, N, true);
-    print_matrix(mw.B, M, N, true);
-    print_matrix(mw.C, M, N, true);
+    print_matrix(mw.A, M, N, false);
+    print_matrix(mw.B, M, N, false);
+    print_matrix(mw.C, M, N, false);
 
 
-    float expected= a11*b11;
+    float expected= 2*a11*b11;
     std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
 
 ////////////////////////////////////////////
