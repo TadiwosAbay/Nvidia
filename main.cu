@@ -176,9 +176,9 @@ int main(){
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const binary16_t a41 = __float2half(-1.0f);
+    const binary16_t a61 = __float2half(-1.0f);
     const binary16_t a51 = __float2half(1);
-    const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
+    //const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
     //const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
 
     //const binary16_t b11 = __float2half(1.0f/(1<<15));
@@ -196,10 +196,10 @@ int main(){
   //std::cout << "c21: " << __half2float(c21) << std::endl;
     mw.reset_host_matrices();
 
-    mw.A[0]=a41;
-    mw.A[1]=a41;
-    mw.A[2]=a41;
-    mw.A[3]=a41;
+    mw.A[0]=a61;
+    mw.A[1]=a61;
+    mw.A[2]=a61;
+    mw.A[3]=a61;
     mw.B[0]=a51;
     mw.B[1]=b41;
     mw.B[2]=b41;
@@ -210,7 +210,7 @@ int main(){
     print_matrix(mw.C, M, N, false);
 
 
-    float expected5= a41*a51+a41*b41+a41*b41+a41*b41;
+    float expected5= a61*a51+a61*b41+a61*b41+a61*b41;
     std::cout<<"Expected Result: "<<static_cast<float>(expected5)<<std::endl;
 
 
