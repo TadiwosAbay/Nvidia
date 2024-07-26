@@ -16,7 +16,7 @@ int main(){
     constexpr size_t K = 16;
 
     // Initialization.
-    auto mw = MFMAWrapper<binary16_t, float>(M, N, K);
+    auto mw = MFMAWrapper<binary16_t, binary16_t>(M, N, K);
 
     const binary16_t minnormal_input = __float2half(1.0 / (1 << 14)); // ldexp(1., -24)
     const binary16_t minsubnormal_input = __float2half(1.0 / (1 << 24)); // ldexp(1., -24)
