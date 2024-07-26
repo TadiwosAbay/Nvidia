@@ -1,5 +1,5 @@
 CXX=nvcc
-CXXFLAGS=-arch=sm_80 -std=c++17
+CXXFLAGS=-arch=sm_70 -std=c++17
 
 all: nvidia_test
 
