@@ -1,4 +1,5 @@
 #include <mma.h>
+#include <cuda_runtime.h>
 
 using namespace nvcuda;
 
@@ -30,6 +31,22 @@ __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false)
     wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
 }
 
+
+
+// CUDA kernel for matrix multiplication with float (FP32) inputs
+__global__ void matmul_kernel(const float* A, const float* B, float* C, int M, int N, int K) {
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    if (row < M && col < N) {
+        float value = 0;
+        for (int i = 0; i < K; ++i) {
+            value += A[row * K + i] * B[i * N + col];
+        }
+        C[row * N + col] += value;
+    }
+}
+
+
 template <typename input_t, typename return_t>
 MFMAWrapper<input_t, return_t>::MFMAWrapper(size_t M, size_t N, size_t K) :
                          M(M), N(N), K(K), LDA(K), LDB(N), LDC(N),
@@ -56,7 +73,18 @@ void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
     cudaMemcpy(C_d, C.data(), C_size * sizeof(return_t), cudaMemcpyHostToDevice);
 
     // Perform matrix multiplication.
-    wmma_ker<<<1,32>>>(A_d, B_d, C_d);
+   if (std::is_same<input_t, float>::value) {
+        dim3 threadsPerBlock(16, 16);
+        dim3 blocksPerGrid((N + threadsPerBlock.x - 1) / threadsPerBlock.x,
+                           (M + threadsPerBlock.y - 1) / threadsPerBlock.y);
+
+        // Perform matrix multiplication using the FP32 kernel.
+        matmul_kernel<<<blocksPerGrid, threadsPerBlock>>>(A_d, B_d, C_d, M, N, K);
+    } else {
+        // Perform matrix multiplication using WMMA.
+        wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
+    }
+    //wmma_ker<<<1,32>>>(A_d, B_d, C_d);
 
     // Copy result from device to host.
     cudaMemcpy(C.data(), C_d, C_size * sizeof(return_t), cudaMemcpyDeviceToHost);
