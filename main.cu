@@ -16,8 +16,8 @@ int main(){
     constexpr size_t K = 16;
 
     // Initialization.
-    auto mw = MFMAWrapper<binary16_t, binary16_t>(M, N, K);
-    auto mw_float = MFMAWrapper<float, float>(M, N, K);
+    auto mw = MFMAWrapper<float, float>(M, N, K);
+    //auto mw_float = MFMAWrapper<float, float>(M, N, K);
 
     const binary16_t minnormal_input = __float2half(1.0 / (1 << 14)); // ldexp(1., -24)
     const binary16_t minsubnormal_input = __float2half(1.0 / (1 << 24)); // ldexp(1., -24)
@@ -237,16 +237,16 @@ int main(){
 
     //std::cout << "c21 without any change: " << __half2float(c21) << std::endl;
   //std::cout << "c21: " << __half2float(c21) << std::endl;
-    mw_float.reset_host_matrices();
+    mw.reset_host_matrices();
 
-    mw_float.A[0]=a11;
-    mw_float.A[1]=a11;
-    mw_float.B[0]=b11;
-    mw_float.B[1]=b11;
-    mw_float.run_mfma_kernel();
-    print_matrix(mw_float.A, M, N, false);
-    print_matrix(mw_float.B, M, N, false);
-    print_matrix(mw_float.C, M, N, false);
+    mw.A[0]=a11;
+    mw.A[1]=a11;
+    mw.B[0]=b11;
+    mw.B[1]=b11;
+    mw.run_mfma_kernel();
+    print_matrix(mw.A, M, N, false);
+    print_matrix(mw.B, M, N, false);
+    print_matrix(mw.C, M, N, false);
 
 
     float expected= a11*b11+a11*b11;
