@@ -27,16 +27,16 @@ int main(){
     // Test case
     mw.reset_host_matrices();
     /* size_t i = 0;
-    for (auto & item : mw.A)
-        item = __float2half(i++);
-    for (auto & item : mw.B)
-        item = __float2half(i++);
-    for (auto & item : mw.C)
-        item = __float2half(i++); */
+    //for (auto & item : mw.A)
+      //  item = __float2half(i++);
+    //for (auto & item : mw.B)
+      //  item = __float2half(i++);
+    //for (auto & item : mw.C)
+       // item = __float2half(i++); */
 
-    mw.A[0] = minnormal_input;
-    mw.B[0] = one_input;
-    mw.C[0] = 1.0;
+    //mw.A[0] = minnormal_input;
+    //mw.B[0] = one_input;
+    //mw.C[0] = 1.0;
     //print_matrix(mw.A, M, K, true);
     //print_matrix(mw.B, M, K, true);
     //print_matrix(mw.C, M, N, true);
