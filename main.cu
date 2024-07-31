@@ -264,7 +264,7 @@ int main(){
     mw.run_mfma_kernel();
     print_matrix(mw.C, M, N, true);
 
-
+    mw.reset_host_matrices();
     const binary16_t a41 = __float2half(1);
     const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
     //const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
