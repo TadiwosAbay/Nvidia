@@ -254,6 +254,17 @@ int main(){
     std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
 
 
+    const binary16_t a21=static_cast<binary16_t>(1.0);
+    const binary16_t b21=static_cast<binary16_t>(1.0);
+    float c21_float = -1.0f * (1.0f / (1 << 11));
+    binary16_t c21 = __float2half(c21_float);
+    mw.A[0]=a21;
+    mw.B[0]=b21;
+    mw.C[0]=c21;
+    mw.run_mfma_kernel();
+    print_matrix(mw.C, M, N, true);
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
   
