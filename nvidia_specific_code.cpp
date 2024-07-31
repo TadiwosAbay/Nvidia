@@ -34,17 +34,17 @@ using bfloat16_t = nv_bfloat16;
 
 
 // CUDA kernel for matrix multiplication with float (FP32) inputs
-__global__ void matmul_kernel(const float* A, const float* B, float* C, int M, int N, int K) {
-    int row = blockIdx.y * blockDim.y + threadIdx.y;
-    int col = blockIdx.x * blockDim.x + threadIdx.x;
-    if (row < M && col < N) {
-        float value = 0;
-        for (int i = 0; i < K; ++i) {
-            value += A[row * K + i] * B[i * N + col];
-        }
-        C[row * N + col] += value;
-    }
-}
+//__global__ void matmul_kernel(const float* A, const float* B, float* C, int M, int N, int K) {
+  //  int row = blockIdx.y * blockDim.y + threadIdx.y;
+    //int col = blockIdx.x * blockDim.x + threadIdx.x;
+    //if (row < M && col < N) {
+      //  float value = 0;
+        //for (int i = 0; i < K; ++i) {
+          //  value += A[row * K + i] * B[i * N + col];
+        //}
+        //C[row * N + col] += value;
+    //}
+//}
 
 
 template <typename input_t, typename return_t>
