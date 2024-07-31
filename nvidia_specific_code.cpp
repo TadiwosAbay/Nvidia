@@ -73,7 +73,8 @@ void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
     cudaMemcpy(C_d, C.data(), C_size * sizeof(return_t), cudaMemcpyHostToDevice);
 
     // Perform matrix multiplication.
-   if (std::is_same<input_t, float>::value) {
+   //if (std::is_same<input_t, float>::value)
+   if (true) {
         dim3 threadsPerBlock(16, 16);
         dim3 blocksPerGrid((N + threadsPerBlock.x - 1) / threadsPerBlock.x,
                            (M + threadsPerBlock.y - 1) / threadsPerBlock.y);
