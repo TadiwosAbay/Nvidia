@@ -74,19 +74,19 @@ void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
 
     // Perform matrix multiplication.
    //if (std::is_same<input_t, float>::value)
-   if (true) {
-        dim3 threadsPerBlock(16, 16);
-        dim3 blocksPerGrid((N + threadsPerBlock.x - 1) / threadsPerBlock.x,
-                           (M + threadsPerBlock.y - 1) / threadsPerBlock.y);
+   //if (true) {
+     //   dim3 threadsPerBlock(16, 16);
+       // dim3 blocksPerGrid((N + threadsPerBlock.x - 1) / threadsPerBlock.x,
+         //                  (M + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
         // Perform matrix multiplication using the FP32 kernel.
-        matmul_kernel<<<blocksPerGrid, threadsPerBlock>>>(A_d, B_d, C_d, M, N, K);
-    } else {
+        //matmul_kernel<<<blocksPerGrid, threadsPerBlock>>>(A_d, B_d, C_d, M, N, K);
+    //} else {
         // Perform matrix multiplication using WMMA.
          
         //wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
-    }
-    //wmma_ker<<<1,32>>>(A_d, B_d, C_d);
+    //}
+    wmma_ker<<<1,32>>>(A_d, B_d, C_d);
 
     // Copy result from device to host.
     cudaMemcpy(C.data(), C_d, C_size * sizeof(return_t), cudaMemcpyDeviceToHost);
