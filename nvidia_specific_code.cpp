@@ -83,7 +83,8 @@ void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
         matmul_kernel<<<blocksPerGrid, threadsPerBlock>>>(A_d, B_d, C_d, M, N, K);
     } else {
         // Perform matrix multiplication using WMMA.
-        wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
+         
+        //wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
     }
     //wmma_ker<<<1,32>>>(A_d, B_d, C_d);
 
