@@ -222,8 +222,8 @@ int main(){
 
 
     //const float a11 = 8.0f;
-    const binary16_t a11= __float2half(ldexpf(1.0f, 3));
-    const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
+    const binary16_t a11= __float2half(ldexpf(1.0f, -7));
+    const binary16_t b11 = __float2half(ldexpf(1.0f, -8));
 
     //const binary16_t b11 = __float2half(1.0f/(1<<15));
 
