@@ -222,8 +222,8 @@ int main(){
 
 
     //const float a11 = 8.0f;
-    const binary16_t a11= __float2half(ldexpf(1.0f, -7));
-    const binary16_t b11 = __float2half(ldexpf(1.0f, -8));
+    const binary16_t a11= __float2half(ldexpf(1.0f, 2));
+    const binary16_t b11 = __float2half(ldexpf(1.0f, -24));
 
     //const binary16_t b11 = __float2half(1.0f/(1<<15));
 
@@ -253,10 +253,10 @@ int main(){
     float expected= a11*b11+a11*b11;
     std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
 
-
+    mw.reset_host_matrices();
     const binary16_t a21=static_cast<binary16_t>(1.0);
     const binary16_t b21=static_cast<binary16_t>(1.0);
-    float c21_float = -1.0f * (1.0f / (1 << 11));
+    float c21_float = -1.0f * (1.0f / (1 << 24));
     binary16_t c21 = __float2half(c21_float);
     mw.A[0]=a21;
     mw.B[0]=b21;
