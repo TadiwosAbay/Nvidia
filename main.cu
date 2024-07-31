@@ -223,7 +223,7 @@ int main(){
 
     //const float a11 = 8.0f;
     const float a11= ldexpf(1.0f, 3);
-    const float b11 = ldexpf(1.0f, -126);
+    const float b11 = ldexpf(1.0f, -128);
 
     //const binary16_t b11 = __float2half(1.0f/(1<<15));
 
