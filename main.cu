@@ -267,14 +267,14 @@ int main(){
 
     const binary16_t a41 = __float2half(1);
     const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
-    const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
+    //const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
 
-    const binary16_t b11 = __float2half(1.0f/(1<<15));
+    //const binary16_t b11 = __float2half(1.0f/(1<<15));
 
-    const binary16_t a21=static_cast<binary16_t>(1.0);
-    const binary16_t b21=static_cast<binary16_t>(1.0);
-    float c21_float = -1.0f * (1.0f / (1 << 11));
-    binary16_t c21 = __float2half(c21_float);
+    //const binary16_t a21=static_cast<binary16_t>(1.0);
+    //const binary16_t b21=static_cast<binary16_t>(1.0);
+    //float c21_float = -1.0f * (1.0f / (1 << 11));
+    //binary16_t c21 = __float2half(c21_float);
 
     mw.A[0]=a41;
     mw.A[1]=a41;
