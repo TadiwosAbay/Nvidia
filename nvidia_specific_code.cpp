@@ -8,7 +8,7 @@ using bfloat16_t = nv_bfloat16;
 
 /* Compute C += A*B, where A, B, and C are 16x16x16 matrices.
    The matrix C is initialized to 0 when `init` is true. */
-//template <typename input_t, typename return_t>
+template <typename input_t, typename return_t>
 __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false) {
 
     // Declare fragments.
