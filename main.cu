@@ -265,6 +265,31 @@ int main(){
     print_matrix(mw.C, M, N, true);
 
 
+    const binary16_t a41 = __float2half(1);
+    const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
+    const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
+
+    const binary16_t b11 = __float2half(1.0f/(1<<15));
+
+    const binary16_t a21=static_cast<binary16_t>(1.0);
+    const binary16_t b21=static_cast<binary16_t>(1.0);
+    float c21_float = -1.0f * (1.0f / (1 << 11));
+    binary16_t c21 = __float2half(c21_float);
+
+    mw.A[0]=a41;
+    mw.A[1]=a41;
+    mw.A[2]=a41;
+    mw.A[3]=a41;
+    mw.B[0]=a41;
+    mw.B[1]=b41;
+    mw.B[2]=b41;
+    mw.B[3]=b41;
+    mw.run_mfma_kernel();
+    print_matrix(mw.A, M, N, false);
+    print_matrix(mw.B, M, N, false);
+    print_matrix(mw.C, M, N, false);
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
   
