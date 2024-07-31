@@ -16,7 +16,7 @@ int main(){
     constexpr size_t K = 16;
 
     // Initialization.
-    auto mw = MFMAWrapper<float, float>(M, N, K);
+    auto mw = MFMAWrapper<binary16_t, binary16_t>(M, N, K);
     //auto mw_float = MFMAWrapper<float, float>(M, N, K);
 
     const binary16_t minnormal_input = __float2half(1.0 / (1 << 14)); // ldexp(1., -24)
@@ -222,8 +222,8 @@ int main(){
 
 
     //const float a11 = 8.0f;
-    const float a11= ldexpf(1.0f, 3);
-    const float b11 = ldexpf(1.0f, -128);
+    const binary16_t a11= __float2half(ldexpf(1.0f, 3));
+    const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
 
     //const binary16_t b11 = __float2half(1.0f/(1<<15));
 
