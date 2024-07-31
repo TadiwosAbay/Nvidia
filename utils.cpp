@@ -9,7 +9,8 @@ void print_matrix(const std::vector<float_type>& A,
         for (size_t j = 0; j < cols; j++) {
         std::cout << std::setw(6);
         auto next_element = bycols ? A[j*cols+i] : A[i*rows+j];
-        std::cout << __half2float(next_element) << " ";
+        std::cout << next_element << " ";
+        //std::cout << __half2float(next_element) << " ";
         }
         std::cout << std::endl;
     }
