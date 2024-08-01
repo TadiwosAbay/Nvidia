@@ -19,10 +19,10 @@ int main(){
     auto mw = MFMAWrapper<float, float>(M, N, K);
     //auto mw_float = MFMAWrapper<float, float>(M, N, K);
 
-    const binary16_t minnormal_input = __float2half(1.0 / (1 << 14)); // ldexp(1., -24)
-    const binary16_t minsubnormal_input = __float2half(1.0 / (1 << 24)); // ldexp(1., -24)
-    const binary16_t one_input = __float2half(1.0);
-    const binary16_t four_input = __float2half(4.0);
+    //const binary16_t minnormal_input = __float2half(1.0 / (1 << 14)); // ldexp(1., -24)
+    //const binary16_t minsubnormal_input = __float2half(1.0 / (1 << 24)); // ldexp(1., -24)
+    //const binary16_t one_input = __float2half(1.0);
+    //const binary16_t four_input = __float2half(4.0);
 
     // Test case
     mw.reset_host_matrices();
@@ -40,7 +40,7 @@ int main(){
     //print_matrix(mw.A, M, K, true);
     //print_matrix(mw.B, M, K, true);
     //print_matrix(mw.C, M, N, true);
-    mw.run_mfma_kernel();
+    //mw.run_mfma_kernel();
     //print_matrix(mw.C, M, N, true);
 //////////////////////////////////////////////////////////////////////////////////////////////////
     //const binary16_t a11 = __float2half(8);
@@ -177,8 +177,8 @@ int main(){
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const binary16_t a61 = __float2half(-1.0f);
-    const binary16_t a51 = __float2half(1);
+    //const binary16_t a61 = __float2half(-1.0f);
+    //const binary16_t a51 = __float2half(1);
     //const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
     //const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
 
@@ -222,8 +222,8 @@ int main(){
 
 
     //const float a11 = 8.0f;
-    const binary16_t a11= __float2half(ldexpf(1.0f, 2));
-    const binary16_t b11 = __float2half(ldexpf(1.0f, -24));
+    //const binary16_t a11= __float2half(ldexpf(1.0f, 2));
+    //const binary16_t b11 = __float2half(ldexpf(1.0f, -24));
 
     //const binary16_t b11 = __float2half(1.0f/(1<<15));
 
@@ -238,35 +238,35 @@ int main(){
 
     //std::cout << "c21 without any change: " << __half2float(c21) << std::endl;
   //std::cout << "c21: " << __half2float(c21) << std::endl;
-    mw.reset_host_matrices();
+    //mw.reset_host_matrices();
 
-    mw.A[0]=a11;
+    //mw.A[0]=a11;
     //mw.A[1]=a11;
-    mw.B[0]=b11;
+    //mw.B[0]=b11;
     //mw.B[1]=b11;
-    mw.run_mfma_kernel();
-    print_matrix(mw.A, M, N, false);
-    print_matrix(mw.B, M, N, false);
-    print_matrix(mw.C, M, N, false);
+    //mw.run_mfma_kernel();
+    //print_matrix(mw.A, M, N, false);
+    //print_matrix(mw.B, M, N, false);
+    //print_matrix(mw.C, M, N, false);
 
 
-    float expected= a11*b11+a11*b11;
-    std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
+    //float expected= a11*b11+a11*b11;
+    //std::cout<<"Expected Result: "<<static_cast<float>(expected)<<std::endl;
 
-    mw.reset_host_matrices();
-    const binary16_t a21=static_cast<binary16_t>(1.0);
-    const binary16_t b21=static_cast<binary16_t>(1.0);
-    float c21_float = -1.0f * (1.0f / (1 << 24));
-    binary16_t c21 = __float2half(c21_float);
-    mw.A[0]=a21;
-    mw.B[0]=b21;
-    mw.C[0]=c21;
-    mw.run_mfma_kernel();
-    print_matrix(mw.C, M, N, true);
+    //mw.reset_host_matrices();
+    //const binary16_t a21=static_cast<binary16_t>(1.0);
+    //const binary16_t b21=static_cast<binary16_t>(1.0);
+    //float c21_float = -1.0f * (1.0f / (1 << 24));
+    //binary16_t c21 = __float2half(c21_float);
+    //mw.A[0]=a21;
+    //mw.B[0]=b21;
+    //mw.C[0]=c21;
+    //mw.run_mfma_kernel();
+    //print_matrix(mw.C, M, N, true);
 
-    mw.reset_host_matrices();
-    const binary16_t a41 = __float2half(1);
-    const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
+    //mw.reset_host_matrices();
+    //const binary16_t a41 = __float2half(1);
+    //const binary16_t b41 = __float2half(ldexpf(1.0f, -11));
     //const binary16_t b11 = __float2half(ldexpf(1.0f, -15));
 
     //const binary16_t b11 = __float2half(1.0f/(1<<15));
@@ -276,18 +276,28 @@ int main(){
     //float c21_float = -1.0f * (1.0f / (1 << 11));
     //binary16_t c21 = __float2half(c21_float);
 
-    mw.A[0]=a41;
-    mw.A[1]=a41;
-    mw.A[2]=a41;
-    mw.A[3]=a41;
-    mw.B[0]=a41;
-    mw.B[1]=b41;
-    mw.B[2]=b41;
-    mw.B[3]=b41;
+    //mw.A[0]=a41;
+    //mw.A[1]=a41;
+    //mw.A[2]=a41;
+    //mw.A[3]=a41;
+    //mw.B[0]=a41;
+    //mw.B[1]=b41;
+    //mw.B[2]=b41;
+    //mw.B[3]=b41;
+    //mw.run_mfma_kernel();
+    //print_matrix(mw.A, M, N, false);
+    //print_matrix(mw.B, M, N, false);
+    //print_matrix(mw.C, M, N, false);
+    mw.reset_host_matrices();
+    const float a21=static_cast<float>(1.0);
+    const float b21=static_cast<float>(1.0);
+    float c21 = -1.0f * (1.0f / (1 << 24));
+    //binary16_t c21 = __float2half(c21_float);
+    mw.A[0]=a21;
+    mw.B[0]=b21;
+    mw.C[0]=c21;
     mw.run_mfma_kernel();
-    print_matrix(mw.A, M, N, false);
-    print_matrix(mw.B, M, N, false);
-    print_matrix(mw.C, M, N, false);
+    print_matrix(mw.C, M, N, true);
 
 
 
