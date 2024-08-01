@@ -339,9 +339,9 @@ int main(){
     mw.A[2]=one;
     mw.A[3]=one;
     mw.B[0]=one;
-    mw.B[16]=half_ulp;
-    mw.B[32]=half_ulp;
-    mw.B[48]=half_ulp;
+    mw.B[4]=half_ulp;
+    mw.B[8]=half_ulp;
+    mw.B[12]=half_ulp;
     //mw.C[0]=c21;
     mw.run_mfma_kernel();
     //print_matrix(mw.B, M, N, true);
