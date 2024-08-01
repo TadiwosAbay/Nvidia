@@ -1,5 +1,6 @@
 #include <mma.h>
 #include <cuda_runtime.h>
+#include <cublas_v2.h>
 
 using namespace nvcuda;
 
@@ -8,28 +9,53 @@ using bfloat16_t = nv_bfloat16;
 
 /* Compute C += A*B, where A, B, and C are 16x16x16 matrices.
    The matrix C is initialized to 0 when `init` is true. */
-template <typename input_t, typename return_t>
-__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false) {
+
+void cublas_matrix_multiply(const float* A_d, const float* B_d, float* C_d, 
+                            size_t M, size_t N, size_t K) {
+    // Create cuBLAS handle
+    cublasHandle_t handle;
+    cublasCreate(&handle);
+
+    // Define the scaling factors
+    const float alpha = 1.0f;
+    const float beta = 0.0f;
+
+    // Perform matrix multiplication: C = alpha * A * B + beta * C
+    cublasGemmEx(handle,
+                 CUBLAS_OP_N, CUBLAS_OP_N,
+                 N, M, K,
+                 &alpha,
+                 B_d, CUDA_R_32F, N,
+                 A_d, CUDA_R_32F, K,
+                 &beta,
+                 C_d, CUDA_R_32F, N,
+                 CUDA_R_32F, CUBLAS_GEMM_DEFAULT_TENSOR_OP);
+
+    // Destroy cuBLAS handle
+    cublasDestroy(handle);
+}
+//template <typename input_t, typename return_t>
+//__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false) {
 
     // Declare fragments.
-    wmma::fragment<wmma::matrix_a, 16, 16, 16, input_t, wmma::row_major> A_fragment;
-    wmma::fragment<wmma::matrix_b, 16, 16, 16, input_t, wmma::col_major> B_fragment;
-    wmma::fragment<wmma::accumulator, 16, 16, 16, return_t> C_fragment;
+    //wmma::fragment<wmma::matrix_a, 16, 16, 16, input_t, wmma::row_major> A_fragment;
+    //wmma::fragment<wmma::matrix_b, 16, 16, 16, input_t, wmma::col_major> B_fragment;
+    //wmma::fragment<wmma::accumulator, 16, 16, 16, return_t> C_fragment;
 
     // Load input matrices and initialize output (if required).
-    wmma::load_matrix_sync(A_fragment, A, 16);
-    wmma::load_matrix_sync(B_fragment, B, 16);
-    if (init)
-        wmma::fill_fragment(C_fragment, 0.0f);
-    else
-        wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
+    //wmma::load_matrix_sync(A_fragment, A, 16);
+    //wmma::load_matrix_sync(B_fragment, B, 16);
+    //if (init)
+      //  wmma::fill_fragment(C_fragment, 0.0f);
+    //else
+      //  wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
 
     // Multiply
-    wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
+    //wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
 
     // Store the output
-    wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
-}
+    //wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
+//}
 
 
 
@@ -86,7 +112,8 @@ void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
          
         //wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
     //}
-    wmma_ker<<<1,32>>>(A_d, B_d, C_d);
+    cublas_matrix_multiply(A_d, B_d, C_d, M, N, K);
+    //wmma_ker<<<1,32>>>(A_d, B_d, C_d);
 
     // Copy result from device to host.
     cudaMemcpy(C.data(), C_d, C_size * sizeof(return_t), cudaMemcpyDeviceToHost);
