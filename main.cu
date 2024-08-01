@@ -11,9 +11,9 @@
 
 int main(){
 
-    constexpr size_t M = 16;
-    constexpr size_t N = 16;
-    constexpr size_t K = 16;
+    constexpr size_t M = 4;
+    constexpr size_t N = 4;
+    constexpr size_t K = 4;
 
     // Initialization.
     auto mw = MFMAWrapper<float, float>(M, N, K);
