@@ -100,10 +100,9 @@ int main(){
 
     mw.reset_host_matrices();
     printf("Extra bit---20nd bit is the extra?\n");
-    const float one=ldexpf(1.0f, 1);
-    const float b21=static_cast<float>(1.0);
+    const float one=ldexpf(1.0f, 0);
     float extra_bit = ldexpf(-1.0f, -20);
-    //binary16_t c21 = __float2half(c21_float);
+    
     mw.A[0]=one;
     mw.B[0]=one;
     mw.C[0]=extra_bit;
@@ -113,8 +112,7 @@ int main(){
     printf("Rounding Mode\n");
     const float half_ulp =ldexpf(1.0f, -20);
     mw.reset_host_matrices();
-    const float ax=static_cast<float>(8);
-    const float bx=ldexpf(1.0f, -127);
+    
     
     mw.A[0]=one;
     mw.A[1]=one;
