@@ -289,6 +289,18 @@ int main(){
     //print_matrix(mw.B, M, N, false);
     //print_matrix(mw.C, M, N, false);
     mw.reset_host_matrices();
+    const float x=ldexpf(-1.0f, -120);
+    const float y=ldexpf(-1.0f, -7);
+    //float c21 = ldexpf(-1.0f, -20);
+    //binary16_t c21 = __float2half(c21_float);
+    mw.A[0]=x;
+    mw.B[0]=y;
+    //mw.C[0]=c21;
+    mw.run_mfma_kernel();
+    print_matrix(mw.C, M, N, true);
+
+
+    mw.reset_host_matrices();
     const float a21=static_cast<float>(1.0);
     const float b21=static_cast<float>(1.0);
     float c21 = ldexpf(-1.0f, -20);
