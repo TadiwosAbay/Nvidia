@@ -101,7 +101,7 @@ int main(){
     mw.reset_host_matrices();
     printf("Extra bit---20nd bit is the extra?\n");
     const float one=ldexpf(1.0f, 0);
-    float extra_bit = ldexpf(1.0f, -20);
+    float extra_bit = ldexpf(-1.0f, -20);
     
     mw.A[0]=one;
     mw.B[0]=one;
