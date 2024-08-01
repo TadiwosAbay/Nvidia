@@ -308,6 +308,7 @@ int main(){
     mw.B[0]=b1;
     //mw.C[0]=c21;
     mw.run_mfma_kernel();
+    print_matrix(mw.B, M, N, true);
     print_matrix(mw.C, M, N, true);
 
 
