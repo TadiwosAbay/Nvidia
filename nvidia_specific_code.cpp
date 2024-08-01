@@ -18,7 +18,7 @@ void cublas_matrix_multiply(const float* A_d, const float* B_d, float* C_d,
 
     // Define the scaling factors
     const float alpha = 1.0f;
-    const float beta = 0.0f;
+    const float beta = 1.0f;
 
     // Perform matrix multiplication: C = alpha * A * B + beta * C
     cublasGemmEx(handle,
