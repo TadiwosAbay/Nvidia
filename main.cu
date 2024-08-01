@@ -291,7 +291,7 @@ int main(){
     mw.reset_host_matrices();
     const float a21=static_cast<float>(1.0);
     const float b21=static_cast<float>(1.0);
-    float c21 = -1.0f * (1.0f / (1 << 23));
+    float c21 = -1.0f * (1.0f / (1 << 22));
     //binary16_t c21 = __float2half(c21_float);
     mw.A[0]=a21;
     mw.B[0]=b21;
