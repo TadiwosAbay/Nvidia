@@ -119,9 +119,9 @@ int main(){
     mw.A[2]=one;
     mw.A[3]=one;
     mw.B[0]=one;
-    mw.B[4]=one;//half_ulp;
-    mw.B[8]=one;//half_ulp;
-    mw.B[12]=one;//half_ulp;
+    mw.B[4]=half_ulp;
+    mw.B[8]=half_ulp;
+    mw.B[12]=half_ulp;
     
     mw.run_mfma_kernel();
    
