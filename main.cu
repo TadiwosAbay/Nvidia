@@ -299,6 +299,17 @@ int main(){
     mw.run_mfma_kernel();
     print_matrix(mw.C, M, N, true);
 
+    mw.reset_host_matrices();
+    const float a1=static_cast<float>(8);
+    const float b1=(1.0f / (1 << 127));
+    float c21 = -1.0f * (1.0f / (1 << ));
+    //binary16_t c21 = __float2half(c21_float);
+    mw.A[0]=a1;
+    mw.B[0]=b1;
+    //mw.C[0]=c21;
+    mw.run_mfma_kernel();
+    print_matrix(mw.C, M, N, true)
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
