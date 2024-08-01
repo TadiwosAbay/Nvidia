@@ -82,11 +82,8 @@ int main(){
     mw.reset_host_matrices();
     const float normal_input=ldexpf(-1.0f, -120);
     const float normal_input2=ldexpf(-1.0f, -7);
-    //float c21 = ldexpf(-1.0f, -20);
-    //binary16_t c21 = __float2half(c21_float);
     mw.A[0]=normal_input;
     mw.B[0]=normal_input2;
-    //mw.C[0]=c21;
     mw.run_mfma_kernel();
     print_matrix(mw.C, M, N, true);
 
@@ -95,13 +92,9 @@ int main(){
     printf("subnormal input\n");
     const float input_normal=static_cast<float>(8);
     const float subnormal_input=ldexpf(1.0f, -127);
-    //float c21 = -1.0f * (1.0f / (1 << ));
-    //binary16_t c21 = __float2half(c21_float);
     mw.A[0]=input_normal;
     mw.B[0]=subnormal_input;
-    //mw.C[0]=c21;
     mw.run_mfma_kernel();
-    //print_matrix(mw.B, M, N, true);
     print_matrix(mw.C, M, N, true);
 
 
@@ -122,8 +115,7 @@ int main(){
     mw.reset_host_matrices();
     const float ax=static_cast<float>(8);
     const float bx=ldexpf(1.0f, -127);
-    //float c21 = -1.0f * (1.0f / (1 << ));
-    //binary16_t c21 = __float2half(c21_float);
+    
     mw.A[0]=one;
     mw.A[1]=one;
     mw.A[2]=one;
@@ -132,9 +124,9 @@ int main(){
     mw.B[4]=half_ulp;
     mw.B[8]=half_ulp;
     mw.B[12]=half_ulp;
-    //mw.C[0]=c21;
+    
     mw.run_mfma_kernel();
-    //print_matrix(mw.B, M, N, true);
+   
     print_matrix(mw.C, M, N, true);
 
 
