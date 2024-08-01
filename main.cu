@@ -324,6 +324,27 @@ int main(){
     print_matrix(mw.C, M, N, true);
 
 
+    const float a41 = 1.0f;
+    const float b41 =ldexpf(1.0f, -20);
+    mw.reset_host_matrices();
+    const float ax=static_cast<float>(8);
+    const float bx=ldexpf(1.0f, -127);
+    //float c21 = -1.0f * (1.0f / (1 << ));
+    //binary16_t c21 = __float2half(c21_float);
+    mw.A[0]=ax;
+    mw.A[1]=ax;
+    mw.A[2]=ax;
+    mw.A[3]=ax;
+    mw.B[0]=ax;
+    mw.B[1]=bx;
+    mw.B[2]=bx;
+    mw.B[3]=bx;
+    //mw.C[0]=c21;
+    mw.run_mfma_kernel();
+    //print_matrix(mw.B, M, N, true);
+    print_matrix(mw.C, M, N, true);
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
   
