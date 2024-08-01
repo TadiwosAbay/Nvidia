@@ -100,7 +100,7 @@ int main(){
 
     mw.reset_host_matrices();
     printf("Extra bit---20nd bit is the extra?\n");
-    const float one=static_cast<float>(1.0);
+    const float one=ldexpf(1.0f, 1);
     const float b21=static_cast<float>(1.0);
     float extra_bit = ldexpf(-1.0f, -20);
     //binary16_t c21 = __float2half(c21_float);
