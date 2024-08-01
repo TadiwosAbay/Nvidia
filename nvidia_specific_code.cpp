@@ -78,9 +78,9 @@ MFMAWrapper<input_t, return_t>::MFMAWrapper(size_t M, size_t N, size_t K) :
                          M(M), N(N), K(K), LDA(K), LDB(N), LDC(N),
                          A_size(M * K), B_size(K * N), C_size(M * N),
                          A(A_size), B(B_size), C(C_size) {
-    cudaMalloc(&A_d, 16 * 16 * sizeof(input_t));
-    cudaMalloc(&B_d, 16 * 16 * sizeof(input_t));
-    cudaMalloc(&C_d, 16 * 16 * sizeof(return_t));
+    cudaMalloc(&A_d, 4 * 4 * sizeof(input_t));
+    cudaMalloc(&B_d, 4 * 4 * sizeof(input_t));
+    cudaMalloc(&C_d, 4 * 4 * sizeof(return_t));
 }
 
 template <typename input_t, typename return_t>
