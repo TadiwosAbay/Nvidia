@@ -319,8 +319,8 @@ int main(){
     const float subnormal_input=ldexpf(1.0f, -127);
     //float c21 = -1.0f * (1.0f / (1 << ));
     //binary16_t c21 = __float2half(c21_float);
-    mw.A[0]=a1;
-    mw.B[0]=b1;
+    mw.A[0]=input_normal;
+    mw.B[0]=subnormal_input;
     //mw.C[0]=c21;
     mw.run_mfma_kernel();
     //print_matrix(mw.B, M, N, true);
