@@ -302,18 +302,6 @@ int main(){
 
 
     mw.reset_host_matrices();
-    printf("Extra bit---20nd bit is the extra?\n");
-    const float one=static_cast<float>(1.0);
-    const float b21=static_cast<float>(1.0);
-    float extra_bit = ldexpf(-1.0f, -20);
-    //binary16_t c21 = __float2half(c21_float);
-    mw.A[0]=one;
-    mw.B[0]=one;
-    mw.C[0]=extra_bit;
-    mw.run_mfma_kernel();
-    print_matrix(mw.C, M, N, true);
-
-    mw.reset_host_matrices();
     printf("subnormal input\n");
     const float input_normal=static_cast<float>(8);
     const float subnormal_input=ldexpf(1.0f, -127);
@@ -326,6 +314,18 @@ int main(){
     //print_matrix(mw.B, M, N, true);
     print_matrix(mw.C, M, N, true);
 
+
+    mw.reset_host_matrices();
+    printf("Extra bit---20nd bit is the extra?\n");
+    const float one=static_cast<float>(1.0);
+    const float b21=static_cast<float>(1.0);
+    float extra_bit = ldexpf(-1.0f, -20);
+    //binary16_t c21 = __float2half(c21_float);
+    mw.A[0]=one;
+    mw.B[0]=one;
+    mw.C[0]=extra_bit;
+    mw.run_mfma_kernel();
+    print_matrix(mw.C, M, N, true);
 
     printf("Rounding Mode\n");
     const float half_ulp =ldexpf(1.0f, -20);
