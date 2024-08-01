@@ -110,7 +110,7 @@ int main(){
     print_matrix(mw.C, M, N, true);
 
     printf("Rounding Mode\n");
-    const float half_ulp =ldexpf(1.0f, -20);
+    const float half_ulp =ldexpf(1.0f, -21);
     mw.reset_host_matrices();
     
     
