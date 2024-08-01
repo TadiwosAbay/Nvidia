@@ -336,9 +336,9 @@ int main(){
     mw.A[2]=a41;
     mw.A[3]=a41;
     mw.B[0]=a41;
-    mw.B[1]=b41;
-    mw.B[2]=b41;
-    mw.B[3]=b41;
+    mw.B[16]=b41;
+    mw.B[32]=b41;
+    mw.B[48]=b41;
     //mw.C[0]=c21;
     mw.run_mfma_kernel();
     //print_matrix(mw.B, M, N, true);
