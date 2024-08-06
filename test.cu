@@ -9,54 +9,57 @@
 //#include "fp_utils.cpp"
 #include "utils.cpp"
 
-
+template <typename FloatFormat>
 void run_tests(){
+    constexpr size_t M = 4;
+    constexpr size_t N = 4;
+    constexpr size_t K = 4;
+
+    auto mw = MFMAWrapper<typename FloatFormat::type, float>(M, N, K);
+
+    // Test 1: Normal input
     mw.reset_host_matrices();
-    const float normal_input= binary16::four();
-    const float normal_input2= binary16::miNormal();;
-    mw.A[0]=1/normal_input;
-    mw.B[0]=normal_input2;
+    const auto normal_input = FloatFormat::four();
+    const auto normal_input2 = FloatFormat::minNormal();
+    mw.A[0] = FloatFormat::one() / normal_input;
+    mw.B[0] = normal_input2;
     mw.run_mfma_kernel();
     print_matrix(mw.C, M, N, true);
 
-
+    // Test 2: Subnormal input
     mw.reset_host_matrices();
-    printf("subnormal input\n");
-    const float input_normal= binary16::four();;
-    const float subnormal_input= binary16::largestSubnormal();
-    mw.A[0]=input_normal;
-    mw.B[0]=subnormal_input;
+    std::cout << "Subnormal input\n";
+    const auto input_normal = FloatFormat::four();
+    const auto subnormal_input = FloatFormat::largestSubnormal();
+    mw.A[0] = input_normal;
+    mw.B[0] = subnormal_input;
     mw.run_mfma_kernel();
     print_matrix(mw.C, M, N, true);
 
-
+    // Test 3: Extra bit
     mw.reset_host_matrices();
-    printf("Extra bit---20nd bit is the extra?\n");
-    const float one= binary16::one();
-    float extra_bit =  binary16::minSubnormal();
-    
-    mw.A[0]=one;
-    mw.B[0]=one;
-    mw.C[0]=extra_bit;
+    std::cout << "Extra bit---20th bit is the extra?\n";
+    const auto one = FloatFormat::one();
+    auto extra_bit = FloatFormat::minSubnormal();
+    mw.A[0] = one;
+    mw.B[0] = one;
+    mw.C[0] = extra_bit;
     mw.run_mfma_kernel();
     print_matrix(mw.C, M, N, true);
 
-    printf("Rounding Mode\n");
-    const float half_ulp =ldexpf(1.0f, -20);
+    // Test 4: Rounding Mode
+    std::cout << "Rounding Mode\n";
+    const auto half_ulp = ldexpf(1.0f, -20); // This part may need to be generalized based on format
     mw.reset_host_matrices();
-    
-    
-    mw.A[0]=one;
-    mw.A[1]=one;
-    mw.A[2]=one;
-    mw.A[3]=one;
-    mw.B[0]=one;
-    mw.B[4]=half_ulp;
-    mw.B[8]=half_ulp;
-    mw.B[12]=half_ulp;
-    
+    mw.A[0] = one;
+    mw.A[1] = one;
+    mw.A[2] = one;
+    mw.A[3] = one;
+    mw.B[0] = one;
+    mw.B[4] = half_ulp;
+    mw.B[8] = half_ulp;
+    mw.B[12] = half_ulp;
     mw.run_mfma_kernel();
-   
     print_matrix(mw.C, M, N, true);
 
 }
