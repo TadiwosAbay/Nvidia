@@ -23,7 +23,7 @@ void run_tests(){
     mw.reset_host_matrices();
     printf("subnormal input\n");
     const float input_normal=static_cast<float>(8);
-    const float subnormal_input=ldexpf(1.0f, -127);
+    const float subnormal_input= binary16::minSubnormal();
     mw.A[0]=input_normal;
     mw.B[0]=subnormal_input;
     mw.run_mfma_kernel();
