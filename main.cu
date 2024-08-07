@@ -12,9 +12,9 @@
 
 int main(){
 
-    constexpr size_t M = 4;
-    constexpr size_t N = 4;
-    constexpr size_t K = 4;
+    //constexpr size_t M = 4;
+    //constexpr size_t N = 4;
+    //constexpr size_t K = 4;
 
     // Initialization.
     run_tests<binary16, binary16>();
