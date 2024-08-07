@@ -9,7 +9,7 @@
 //#include "fp_utils.cpp"
 #include "utils.cpp"
 
-template <typename FloatFormat>
+template <typename InputFormat, typename OutputFormat>
 void run_tests(){
     constexpr size_t M = 4;
     constexpr size_t N = 4;
