@@ -3,6 +3,7 @@
 #include <vector>
 #include <random>
 #include <cmath>
+#include "test.cu"
 
 #include "MFMAWrapper.h"
 #include "nvidia_specific_code.cpp"
