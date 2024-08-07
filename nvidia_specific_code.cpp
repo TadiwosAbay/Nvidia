@@ -2,10 +2,10 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-//using namespace nvcuda;
+using namespace nvcuda;
 
-//using binary16_t = half;
-//using bfloat16_t = nv_bfloat16;
+using binary16_t = half;
+using bfloat16_t = nv_bfloat16;
 
 /* Compute C += A*B, where A, B, and C are 16x16x16 matrices.
    The matrix C is initialized to 0 when `init` is true. */
