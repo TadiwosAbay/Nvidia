@@ -17,7 +17,8 @@ int main(){
     constexpr size_t K = 4;
 
     // Initialization.
-    auto mw = MFMAWrapper<float, float>(M, N, K);
+    run_tests<binary16, binary16>();
+    //auto mw = MFMAWrapper<float, float>(M, N, K);
     //auto mw_float = MFMAWrapper<float, float>(M, N, K);
 
    
