@@ -24,6 +24,8 @@ void run_tests(){
     mw.A[0] = InputFormat::one() / normal_input;
     mw.B[0] = normal_input2;
     mw.run_mfma_kernel();
+    print_matrix(mw.A, M, N, true);
+    print_matrix(mw.B, M, N, true);
     print_matrix(mw.C, M, N, true);
 
     // Test 2: Subnormal input
