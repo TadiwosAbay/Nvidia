@@ -14,8 +14,8 @@ void run_tests(){
     constexpr size_t M = 4;
     constexpr size_t N = 4;
     constexpr size_t K = 4;
-
-    auto mw = MFMAWrapper<typename FloatFormat::type, float>(M, N, K);
+    auto mw = MFMAWrapper<typename InputFormat::type, typename OutputFormat::type>(M, N, K);
+    //auto mw = MFMAWrapper<typename FloatFormat::type, float>(M, N, K);
 
     // Test 1: Normal input
     mw.reset_host_matrices();
