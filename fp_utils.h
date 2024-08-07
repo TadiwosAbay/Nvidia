@@ -27,10 +27,18 @@ public:
     static constexpr type largestSubnormal() {
         return (type(1) - std::numeric_limits<type>::epsilon()) * minNormal();
     }
-    
+
     static constexpr type minNormal() {
+    if constexpr (std::is_same_v<type, __half>) {
+        return __float2half(1.0f) / __float2half(ldexpf(1.0f, emax - precision));
+    } else {
         return type(1) / (type(1) << (emax - precision));
     }
+    }
+
+    //static constexpr type minNormal() {
+      //  return type(1) / (type(1) << (emax - precision));
+    //}
 
     static constexpr type one() {
         return type(1);
