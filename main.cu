@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include <vector>
+//#include <vector>
 #include <random>
 #include <cmath>
 #include "test.cu"
