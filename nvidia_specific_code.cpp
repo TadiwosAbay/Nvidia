@@ -11,7 +11,7 @@ using bfloat16_t = nv_bfloat16;
    The matrix C is initialized to 0 when `init` is true. */
 
 //void cublas_matrix_multiply(const float* A_d, const float* B_d, float* C_d, 
-                            size_t M, size_t N, size_t K) {
+                          //  size_t M, size_t N, size_t K) {
     // Create cuBLAS handle
     //cublasHandle_t handle;
     //cublasCreate(&handle);
