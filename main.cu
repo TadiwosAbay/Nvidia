@@ -7,7 +7,7 @@
 
 #include "MFMAWrapper.h"
 #include "nvidia_specific_code.cpp"
-//#include "fp_utils.cpp"
+#include "fp_utils.cpp"
 #include "utils.cpp"
 
 int main(){
