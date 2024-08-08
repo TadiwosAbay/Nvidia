@@ -9,13 +9,35 @@
 #include "fp_utils.h"
 #include "utils.cpp"
 
+#include <typeinfo>
+#include <string>
+
+
+template <typename T>
+std::string get_type_name() {
+    if (typeid(T) == typeid(__half)) {
+        return "binary16_t (half)";
+    } else if (typeid(T) == typeid(nv_bfloat16)) {
+        return "bfloat16_t";
+    } else if (typeid(T) == typeid(float)) {
+        return "float";
+    } else if (typeid(T) == typeid(double)) {
+        return "double";
+    }
+    return "unknown type";
+}
+
 template <typename InputFormat, typename OutputFormat>
 void run_tests(){
     constexpr size_t M = 4;
     constexpr size_t N = 4;
     constexpr size_t K = 4;
     auto mw = MFMAWrapper<typename InputFormat::type, typename OutputFormat::type>(M, N, K);
-    std::cout << InputFormat << std::endl;
+    //std::cout << InputFormat << std::endl;
+
+     // Print the InputFormat type
+    std::cout << "InputFormat: " << get_type_name<typename InputFormat::type>() << std::endl;
+
     //auto mw = MFMAWrapper<typename InputFormat::type, float>(M, N, K);
 
     // Test 1: Normal input
