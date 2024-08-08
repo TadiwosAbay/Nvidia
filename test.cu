@@ -69,6 +69,9 @@ void run_tests(){
     std::cout << "Extra bit---20th bit is the extra?\n";
     const auto one = InputFormat::one();
     auto extra_bit = InputFormat::extra_bit();
+    print_matrix<InputFormat>(mw.A, M, N, true);
+    print_matrix<InputFormat>(mw.B, M, N, false);
+    print_matrix<InputFormat>(mw.C, M, N, true);
     mw.A[0] = one;
     mw.B[0] = one;
     mw.C[0] = extra_bit;
