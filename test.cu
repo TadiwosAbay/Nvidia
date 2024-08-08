@@ -20,7 +20,7 @@ void run_tests(){
     // Test 1: Normal input
     mw.reset_host_matrices();
     const auto normal_input = InputFormat::four();
-    const auto normal_input2 = InputFormat::minNormal();
+    const auto normal_input2 = InputFormat::minimumNormal();
     mw.A[0] = InputFormat::one() / normal_input;
     mw.B[0] = normal_input2;
     mw.run_mfma_kernel();
@@ -32,7 +32,7 @@ void run_tests(){
     mw.reset_host_matrices();
     std::cout << "Subnormal input\n";
     const auto input_normal = InputFormat::four();
-    const auto subnormal_input = InputFormat::largestSubnormal();
+    const auto subnormal_input = InputFormat::largeSubnormal();
     mw.A[0] = input_normal;
     mw.B[0] = subnormal_input;
     mw.run_mfma_kernel();
