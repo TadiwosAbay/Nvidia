@@ -84,9 +84,9 @@ void run_tests(){
     mw.A[2] = one;
     mw.A[3] = one;
     mw.B[0] = one;
-    mw.B[4] = half_ulp;
-    mw.B[8] = half_ulp;
-    mw.B[12] = half_ulp;
+    mw.B[1] = half_ulp;
+    mw.B[2] = half_ulp;
+    mw.B[3] = half_ulp;
     mw.run_mfma_kernel();
     print_matrix<InputFormat>(mw.C, M, N, true);
 
