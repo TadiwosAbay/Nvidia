@@ -17,7 +17,8 @@ void print_matrix(const std::vector<float_type>& A,
             if constexpr (std::is_same_v<InputFormat, binary16>) {
                 std::cout << __half2float(next_element);  // Convert __half to float
             } else if constexpr (std::is_same_v<InputFormat, bfloat16>) {
-                std::cout << __bfloat162float(next_element);  // Convert bfloat16 to float
+                std::cout << __half2float(next_element);  // Convert bfloat16 to float
+               //__bfloat162float(next_element)
             } else {
                 std::cout << next_element;  // For other types, print directly
             }
