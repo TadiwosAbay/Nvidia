@@ -7,6 +7,7 @@
 #include <cuda_fp16.h>   // For __half (binary16)
 #include <cuda_bf16.h> 
 
+using binary16_t = half;
 using binary32_t = float;
 using binary64_t = double;
 
