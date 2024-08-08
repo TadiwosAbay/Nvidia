@@ -48,9 +48,9 @@ void run_tests(){
     mw.A[0] = InputFormat::one() / normal_input;
     mw.B[0] = normal_input2;
     mw.run_mfma_kernel();
-    print_matrix(mw.A, M, N, true);
-    print_matrix(mw.B, M, N, false);
-    print_matrix(mw.C, M, N, true);
+    print_matrix<InputFormat>(mw.A, M, N, true);
+    print_matrix<InputFormat>(mw.B, M, N, false);
+    print_matrix<InputFormat>(mw.C, M, N, true);
 
     // Test 2: Subnormal input
     mw.reset_host_matrices();
@@ -60,8 +60,8 @@ void run_tests(){
     mw.A[0] = input_normal;
     mw.B[0] = subnormal_input;
     mw.run_mfma_kernel();
-    print_matrix(mw.B, M, N, false);
-    print_matrix(mw.C, M, N, true);
+    print_matrix<InputFormat>(mw.B, M, N, false);
+    print_matrix<InputFormat>(mw.C, M, N, true);
 
     // Test 3: Extra bit
     mw.reset_host_matrices();
@@ -72,7 +72,7 @@ void run_tests(){
     mw.B[0] = one;
     mw.C[0] = extra_bit;
     mw.run_mfma_kernel();
-    print_matrix(mw.C, M, N, true);
+    print_matrix<InputFormat>(mw.C, M, N, true);
 
     // Test 4: Rounding Mode
     std::cout << "Rounding Mode\n";
@@ -87,6 +87,6 @@ void run_tests(){
     mw.B[8] = half_ulp;
     mw.B[12] = half_ulp;
     mw.run_mfma_kernel();
-    print_matrix(mw.C, M, N, true);
+    print_matrix<InputFormat>(mw.C, M, N, true);
 
 }
