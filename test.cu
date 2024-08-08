@@ -73,6 +73,8 @@ void run_tests(){
     mw.B[0] = one;
     mw.C[0] = extra_bit;
     mw.run_mfma_kernel();
+    print_matrix<InputFormat>(mw.A, M, N, true);
+    print_matrix<InputFormat>(mw.B, M, N, false);
     print_matrix<InputFormat>(mw.C, M, N, true);
 
     // Test 4: Rounding Mode
