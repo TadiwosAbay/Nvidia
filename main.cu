@@ -17,7 +17,7 @@ int main(){
     //constexpr size_t K = 4;
 
     // Initialization.
-    run_tests<binary16, binary16>();
+    run_tests<bfloat16, bfloat16>();
     //auto mw = MFMAWrapper<float, float>(M, N, K);
     //auto mw_float = MFMAWrapper<float, float>(M, N, K);
 
