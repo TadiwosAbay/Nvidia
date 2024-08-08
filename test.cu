@@ -44,7 +44,7 @@ void run_tests(){
     // Test 1: Normal input
     mw.reset_host_matrices();
     const auto normal_input = InputFormat::four();
-    const auto normal_input2= InputFormat::four();
+    const auto normal_input2= InputFormat::minimumNormal();
     //const auto normal_input2 = InputFormat::minimumNormal();
     mw.A[0] = InputFormat::one() / normal_input;
     mw.B[0] = normal_input2;
@@ -74,7 +74,7 @@ void run_tests(){
     print_matrix<InputFormat>(mw.C, M, N, true);
     mw.A[0] = one;
     mw.B[0] = one;
-    mw.C[0] = extra_bit;
+    mw.C[0] = -1*extra_bit;
     mw.run_mfma_kernel();
     print_matrix<InputFormat>(mw.A, M, N, true);
     print_matrix<InputFormat>(mw.B, M, N, false);
