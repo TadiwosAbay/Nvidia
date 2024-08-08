@@ -15,6 +15,7 @@ void run_tests(){
     constexpr size_t N = 4;
     constexpr size_t K = 4;
     auto mw = MFMAWrapper<typename InputFormat::type, typename OutputFormat::type>(M, N, K);
+    std::cout << InputFormat << std::endl;
     //auto mw = MFMAWrapper<typename InputFormat::type, float>(M, N, K);
 
     // Test 1: Normal input
