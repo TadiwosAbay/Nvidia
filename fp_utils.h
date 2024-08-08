@@ -4,6 +4,8 @@
 
 #include <cmath>
 #include <limits>
+#include <cuda_fp16.h>   // For __half (binary16)
+#include <cuda_bf16.h> 
 
 using binary32_t = float;
 using binary64_t = double;
@@ -73,7 +75,7 @@ public:
 };
 
 using binary16 = IEEEFloatFormat<binary16_t, 11, 15>;
-using bfloat16 = IEEEFloatFormat<binary16_t, 8, 127>;
+using bfloat16 = IEEEFloatFormat<__nv_bfloat16, 8, 127>;
 using binary32 = IEEEFloatFormat<binary32_t, 24, 127>;
 using binary64 = IEEEFloatFormat<binary64_t, 53, 1023>;
 
