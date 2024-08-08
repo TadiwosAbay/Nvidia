@@ -15,11 +15,12 @@
 
 template <typename T>
 std::string get_type_name() {
-    if (typeid(T) == typeid(__half)) {
-        return "binary16_t (half)";
-    } else if (typeid(T) == typeid(nv_bfloat16)) {
+    if (typeid(T) == typeid(nv_bfloat16)) {
         return "bfloat16_t";
-    } else if (typeid(T) == typeid(float)) {
+    }
+    else if (typeid(T) == typeid(__half)) {
+        return "binary16_t (half)";
+    }  else if (typeid(T) == typeid(float)) {
         return "float";
     } else if (typeid(T) == typeid(double)) {
         return "double";
