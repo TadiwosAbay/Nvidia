@@ -1,7 +1,7 @@
 #include <mma.h>
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
-//#include "fp_utils.h"
+#include "fp_utils.h"
 
 using namespace nvcuda;
 
