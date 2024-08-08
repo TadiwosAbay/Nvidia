@@ -77,7 +77,7 @@ void run_tests(){
 
     // Test 4: Rounding Mode
     std::cout << "Rounding Mode\n";
-    const auto half_ulp = ldexpf(1.0f, -20); // This part may need to be generalized based on format
+    const auto half_ulp = InputFormat::extra_bit(); // This part may need to be generalized based on format
     mw.reset_host_matrices();
     mw.A[0] = one;
     mw.A[1] = one;
