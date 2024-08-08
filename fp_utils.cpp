@@ -23,6 +23,12 @@ public:
     static constexpr type minNormal() {
         return type(1) / (type(1) << (emax - precision));
     }
+    static constexpr type minimumNormal() {
+        return type(1) / (type(1) << (emax-1));
+    }
+    static constexpr type largeSubnormal() {
+        return type(1) / (type(1) << (emax));
+    }
 
     static constexpr type one() {
         return type(1);
