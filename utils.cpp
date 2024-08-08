@@ -1,5 +1,7 @@
 /* Print the elements of the m x n matrix A. The elements are assumed to be
    stored by columns if `bycols` is `true` and by rows if `bycols` is false. */
+#include <cuda_fp16.h>   // For __half (binary16)
+#include <cuda_bf16.h>
 template <typename float_type>
 void print_matrix(const std::vector<float_type>& A,
                   const size_t rows,
