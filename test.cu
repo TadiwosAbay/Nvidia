@@ -36,6 +36,7 @@ void run_tests(){
     mw.A[0] = input_normal;
     mw.B[0] = subnormal_input;
     mw.run_mfma_kernel();
+    print_matrix(mw.B, M, N, false);
     print_matrix(mw.C, M, N, true);
 
     // Test 3: Extra bit
