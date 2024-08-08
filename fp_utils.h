@@ -55,6 +55,14 @@ public:
         }
     }
 
+    static constexpr type extra_bit() {
+         if constexpr (std::is_same_v<type, __half>) {
+        return __float2half(1.0f) / __float2half(ldexpf(1.0f, precision));
+    } else {
+            return static_cast<type>(std::ldexp(1.0, -1*precision));
+        }
+    }
+
     //static constexpr type minNormal() {
       //  return type(1) / (type(1) << (emax - precision));
     //}
