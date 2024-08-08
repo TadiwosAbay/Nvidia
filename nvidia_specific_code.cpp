@@ -62,8 +62,8 @@ template <typename input_t, typename return_t>
 __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false) {
     if constexpr (std::is_same_v<input_t, binary16_t>) {
         // For binary16_t (which is similar to __half)
-        wmma::fragment<wmma::matrix_a, 16, 16, 16, binary16_t, wmma::row_major> A_fragment;
-        wmma::fragment<wmma::matrix_b, 16, 16, 16, binary16_t, wmma::col_major> B_fragment;
+        wmma::fragment<wmma::matrix_a, 16, 16, 16, input_t, wmma::row_major> A_fragment;
+        wmma::fragment<wmma::matrix_b, 16, 16, 16, input_t, wmma::col_major> B_fragment;
         wmma::fragment<wmma::accumulator, 16, 16, 16, return_t> C_fragment;
 
         wmma::load_matrix_sync(A_fragment, A, 16);
