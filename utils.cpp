@@ -15,6 +15,7 @@ void print_matrix(const std::vector<float_type>& A,
         if constexpr (std::is_same_v<float_type, __half>) {
         std::cout << __half2float(next_element);  // Convert __half to float
     } else if constexpr (std::is_same_v<float_type, nv_bfloat16>) {
+        std::cout << "reached" << std::endl;
         std::cout << __bfloat162float(next_element);  // Convert bfloat16 to float
     } else {
         std::cout << next_element;  // For other types, print directly
