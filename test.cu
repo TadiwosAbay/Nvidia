@@ -68,7 +68,7 @@ void run_tests(){
     mw.reset_host_matrices();
     std::cout << "Extra bit---20th bit is the extra?\n";
     const auto one = InputFormat::one();
-    auto extra_bit = InputFormat::minSubnormal();
+    auto extra_bit = InputFormat::extra_bit();
     mw.A[0] = one;
     mw.B[0] = one;
     mw.C[0] = extra_bit;
