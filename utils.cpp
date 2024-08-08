@@ -10,7 +10,14 @@ void print_matrix(const std::vector<float_type>& A,
         std::cout << std::setw(6);
         auto next_element = bycols ? A[j*cols+i] : A[i*rows+j];
         //std::cout << next_element<< " ";
-        std::cout << __half2float(next_element) << " ";
+        if constexpr (std::is_same_v<T, __half>) {
+        std::cout << __half2float(next_element);  // Convert __half to float
+    } else if constexpr (std::is_same_v<T, nv_bfloat16>) {
+        std::cout << __bfloat162float(next_element);  // Convert bfloat16 to float
+    } else {
+        std::cout << next_element;  // For other types, print directly
+    }
+        //std::cout << __half2float(next_element) << " ";
         }
         std::cout << std::endl;
     }
