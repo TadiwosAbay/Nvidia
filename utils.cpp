@@ -13,6 +13,7 @@ void print_matrix(const std::vector<float_type>& A,
         auto next_element = bycols ? A[j*cols+i] : A[i*rows+j];
         //std::cout << next_element<< " ";
         if constexpr (std::is_same_v<float_type, __half>) {
+        std::cout << "reached HALF" << std::endl;
         std::cout << __half2float(next_element);  // Convert __half to float
     } else if constexpr (std::is_same_v<float_type, nv_bfloat16>) {
         std::cout << "reached" << std::endl;
