@@ -43,15 +43,16 @@ public:
          if constexpr (std::is_same_v<type, __half>) {
         return __float2half(1.0f) / __float2half(ldexpf(1.0f, emax - 1));
     } else {
-        return type(1) / (type(1) << (emax-1));
+        //return type(1) / (type(1) << (emax-1));
+        return static_cast<type>(std::ldexp(1.0, 1 - emax));
          }
     }
     static constexpr type largeSubnormal() {
          if constexpr (std::is_same_v<type, __half>) {
         return __float2half(1.0f) / __float2half(ldexpf(1.0f, emax));
     } else {
-        return type(1) / (type(1) << (emax));
-         }
+            return static_cast<type>(std::ldexp(1.0, -1*emax));
+        }
     }
 
     //static constexpr type minNormal() {
