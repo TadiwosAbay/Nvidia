@@ -49,8 +49,8 @@ void run_tests(){
     mw.A[0] = InputFormat::one() / normal_input;
     mw.B[0] = normal_input2;
     mw.run_mfma_kernel();
-    print_matrix<InputFormat>(mw.A, M, N, true);
-    print_matrix<InputFormat>(mw.B, M, N, false);
+    //print_matrix<InputFormat>(mw.A, M, N, true);
+    //print_matrix<InputFormat>(mw.B, M, N, false);
     print_matrix<InputFormat>(mw.C, M, N, true);
 
     // Test 2: Subnormal input
@@ -61,7 +61,7 @@ void run_tests(){
     mw.A[0] = input_normal;
     mw.B[0] = subnormal_input;
     mw.run_mfma_kernel();
-    print_matrix<InputFormat>(mw.B, M, N, false);
+    //print_matrix<InputFormat>(mw.B, M, N, false);
     print_matrix<InputFormat>(mw.C, M, N, true);
 
     // Test 3: Extra bit
@@ -69,15 +69,15 @@ void run_tests(){
     std::cout << "Extra bit---20th bit is the extra?\n";
     const auto one = InputFormat::one();
     auto extra_bit = InputFormat::extra_bit();
-    print_matrix<InputFormat>(mw.A, M, N, true);
-    print_matrix<InputFormat>(mw.B, M, N, false);
+    //print_matrix<InputFormat>(mw.A, M, N, true);
+    //print_matrix<InputFormat>(mw.B, M, N, false);
     print_matrix<InputFormat>(mw.C, M, N, true);
     mw.A[0] = one;
     mw.B[0] = one;
     mw.C[0] = static_cast<decltype(extra_bit)>(-1)*extra_bit;
     mw.run_mfma_kernel();
-    print_matrix<InputFormat>(mw.A, M, N, true);
-    print_matrix<InputFormat>(mw.B, M, N, false);
+    //print_matrix<InputFormat>(mw.A, M, N, true);
+    //print_matrix<InputFormat>(mw.B, M, N, false);
     print_matrix<InputFormat>(mw.C, M, N, true);
 
     // Test 4: Rounding Mode
