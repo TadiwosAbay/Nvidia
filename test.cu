@@ -71,7 +71,7 @@ void run_tests(){
     auto extra_bit = InputFormat::extra_bit();
     //print_matrix<InputFormat>(mw.A, M, N, true);
     //print_matrix<InputFormat>(mw.B, M, N, false);
-    print_matrix<InputFormat>(mw.C, M, N, true);
+    //print_matrix<InputFormat>(mw.C, M, N, true);
     mw.A[0] = one;
     mw.B[0] = one;
     mw.C[0] = static_cast<decltype(extra_bit)>(-1)*extra_bit;
