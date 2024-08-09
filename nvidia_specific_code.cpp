@@ -90,8 +90,9 @@ __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false)
                 wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
 
             wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
-            wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
+           
         }
+        wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
     } else if constexpr (std::is_same_v<input_t, binary64_t>) {
         // For binary64_t (which maps to double)
         wmma::fragment<wmma::matrix_a, 8, 8, 4, double, wmma::row_major> A_fragment;
@@ -110,8 +111,9 @@ __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false)
                 wmma::load_matrix_sync(C_fragment, C + warpM * 8 + warpN * 16 * 8, 16, wmma::mem_row_major);
 
             wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
-            wmma::store_matrix_sync(C + warpM * 8 + warpN * 16 * 8, C_fragment, 16, wmma::mem_row_major);
+            
         }
+       wmma::store_matrix_sync(C + warpM * 8 + warpN * 16 * 8, C_fragment, 16, wmma::mem_row_major);
     }
 }
 // CUDA kernel for matrix multiplication with float (FP32) inputs
