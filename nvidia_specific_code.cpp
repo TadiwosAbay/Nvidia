@@ -65,7 +65,7 @@ using bfloat16_t = nv_bfloat16;
 template <typename input_t, typename return_t>
 __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false) {
     // Static assert to catch unsupported types at compile time
-    static_assert(sizeof(input_t) == 0, "Unsupported input type");
+    //static_assert(sizeof(input_t) == 0, "Unsupported input type");
 }
 
 // Specialization for binary16_t (using SFINAE)
