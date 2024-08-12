@@ -58,6 +58,10 @@ using bfloat16_t = nv_bfloat16;
     //wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
 //}
 
+template <typename input_t, typename return_t>
+__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false);
+
+
 template <typename return_t>
 __global__ void wmma_ker<binary16_t, return_t>(binary16_t *A, binary16_t *B, return_t *C, bool init) {
     wmma::fragment<wmma::matrix_a, 16, 16, 16, binary16_t, wmma::row_major> A_fragment;
