@@ -9,27 +9,20 @@
 #include "fp_utils.h"
 #include "utils.cpp"
 
-#include <typeinfo>
 #include <string>
 
-
-template <typename T>
-std::string get_type_name() {
-    if (typeid(T) == typeid(nv_bfloat16)) {
-        return "bfloat16_t";
-    }
-    else if (typeid(T) == typeid(__half)) {
-        return "binary16_t (half)";
-    }  else if (typeid(T) == typeid(float)) {
-        return "float";
-    } else if (typeid(T) == typeid(double)) {
-        return "double";
-    }
-    return "unknown type";
-}
+template <typename T> std::string get_type_name() {return "unknown type";}
+template <> std::string get_type_name<bfloat16_t>() {return "bfloat16";}
+template <> std::string get_type_name<binary16_t>() {return "binary16 (half)";}
+template <> std::string get_type_name<binary32_t>() {return "binary32 (single)";}
+template <> std::string get_type_name<binary64_t>() {return "binary64 (double)";}
 
 template <typename InputFormat, typename OutputFormat>
 void run_tests(){
+    // Possible matrix sizes are here:
+    // https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#element-types-and-matrix-sizes
+    // Indeed, there is no 4 x 4 x 4. That worked in our first paper, but probably just because most of
+    // the matrix was empty anyway. Good spot!
     constexpr size_t M = 4;
     constexpr size_t N = 4;
     constexpr size_t K = 4;
@@ -37,7 +30,9 @@ void run_tests(){
     //std::cout << InputFormat << std::endl;
 
      // Print the InputFormat type
-    std::cout << "InputFormat: " << get_type_name<typename InputFormat::type>() << std::endl;
+    std::cout << "Input  Format: " << get_type_name<typename InputFormat::type>() << std::endl;
+    std::cout << "Output Format: " << get_type_name<typename OutputFormat::type>() << std::endl;
+    
 
     //auto mw = MFMAWrapper<typename InputFormat::type, float>(M, N, K);
 
