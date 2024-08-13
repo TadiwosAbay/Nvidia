@@ -102,8 +102,9 @@ __global__ void wmma_ker(binary32_t *A, binary32_t *B, return_t *C, bool init) {
             wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
 
         wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
+       wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
     }
-    wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
+    
 }
 
 // Specialization for binary64_t (double)
@@ -125,8 +126,9 @@ __global__ void wmma_ker(binary64_t *A, binary64_t *B, return_t *C, bool init) {
             wmma::load_matrix_sync(C_fragment, C + warpM * 8 + warpN * 16 * 8, 16, wmma::mem_row_major);
 
         wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
+       wmma::store_matrix_sync(C + warpM * 8 + warpN * 16 * 8, C_fragment, 16, wmma::mem_row_major);
     }
-    wmma::store_matrix_sync(C + warpM * 8 + warpN * 16 * 8, C_fragment, 16, wmma::mem_row_major);
+   
 }
 
 
