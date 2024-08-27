@@ -32,16 +32,15 @@ void run_tests(){
      // Print the InputFormat type
     std::cout << "Input  Format: " << get_type_name<typename InputFormat::type>() << std::endl;
     std::cout << "Output Format: " << get_type_name<typename OutputFormat::type>() << std::endl;
-    
 
     //auto mw = MFMAWrapper<typename InputFormat::type, float>(M, N, K);
 
     // Test 1: Normal input
     mw.reset_host_matrices();
-    const auto normal_input = InputFormat::four();
-    const auto normal_input2= InputFormat::minimumNormal();
+    const auto normal_input = InputFormat::constant(4);
+    const auto normal_input2= InputFormat::minNormal();
     //const auto normal_input2 = InputFormat::minimumNormal();
-    mw.A[0] = InputFormat::one() / normal_input;
+    mw.A[0] = InputFormat::constant(1) / normal_input;
     mw.B[0] = normal_input2;
     mw.run_mfma_kernel();
     //print_matrix<InputFormat>(mw.A, M, N, true);
@@ -51,18 +50,20 @@ void run_tests(){
     // Test 2: Subnormal input
     mw.reset_host_matrices();
     std::cout << "Subnormal input\n";
-    const auto input_normal = InputFormat::four();
-    const auto subnormal_input = InputFormat::largeSubnormal();
+    const auto input_normal = InputFormat::constant(4);
+    const auto subnormal_input = InputFormat::midwaySubnormal();
     mw.A[0] = input_normal;
     mw.B[0] = subnormal_input;
     mw.run_mfma_kernel();
     //print_matrix<InputFormat>(mw.B, M, N, false);
     print_matrix<InputFormat>(mw.C, M, N, true);
 
+    std::cout << input_normal << std::endl;
+
     // Test 3: Extra bit
     mw.reset_host_matrices();
     std::cout << "Extra bit---20th bit is the extra?\n";
-    const auto one = InputFormat::one();
+    const auto one = InputFormat::constant(1);
     auto extra_bit = InputFormat::extra_bit();
     //print_matrix<InputFormat>(mw.A, M, N, true);
     //print_matrix<InputFormat>(mw.B, M, N, false);

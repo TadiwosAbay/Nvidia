@@ -4,83 +4,90 @@
 
 #include <cmath>
 #include <limits>
-#include <cuda_fp16.h>   // For __half (binary16)
-#include <cuda_bf16.h> 
 
-using binary16_t = half;
 using binary32_t = float;
 using binary64_t = double;
 
-template <int Exponent, typename T>
+template <typename input_t, typename output_t>
+output_t convert(input_t x) {
+    return static_cast<output_t>(x);
+}
+
+template <size_t Exponent, typename T>
 constexpr T constexpr_ldexp(T x) {
     return x * (1 << Exponent);
 }
 
+/*
+ * All constants are computed in binary64 arithetmic and converted to the
+ * target precision by the `convert` function.
+ */
 template <typename storage_format, int Precision, int Emax>
 class IEEEFloatFormat {
 public:
-    static constexpr int precision = Precision;
-    static constexpr int emax = Emax;
+    static constexpr size_t precision = Precision;
+    static constexpr size_t emax = Emax;
     using type = storage_format;
 
-    static constexpr type minSubnormal() {
-        return static_cast<type>(constexpr_ldexp<2 - emax - precision>(1));
+    static constexpr storage_format unitRoundoff() {
+        return convert<binary64_t, storage_format>(ldexp(1.0, -precision));
     }
 
-    static constexpr type largestSubnormal() {
-        return (type(1) - std::numeric_limits<type>::epsilon()) * minNormal();
+    static constexpr storage_format machineEpsilon() {
+        return convert<binary64_t, storage_format>(ldexp(1.0, 1-precision));
     }
 
-    static constexpr type minNormal() {
-    if constexpr (std::is_same_v<type, __half>) {
-        return __float2half(1.0f) / __float2half(ldexpf(1.0f, emax - precision));
-    } else {
-        return type(1) / (type(1) << (emax - precision));
-    }
+    static constexpr storage_format minSubnormal() {
+        return convert<binary64_t, storage_format>(ldexp(1.0, 2 - emax - precision));
     }
 
-    static constexpr type minimumNormal() {
-         if constexpr (std::is_same_v<type, __half>) {
-        return __float2half(1.0f) / __float2half(ldexpf(1.0f, emax - 1));
-    } else {
-        //return type(1) / (type(1) << (emax-1));
-        return static_cast<type>(std::ldexp(1.0, 1 - emax));
-         }
-    }
-    static constexpr type largeSubnormal() {
-         if constexpr (std::is_same_v<type, __half>) {
-        return __float2half(1.0f) / __float2half(ldexpf(1.0f, emax));
-    } else {
-            return static_cast<type>(std::ldexp(1.0, -1*emax));
-        }
+    static constexpr storage_format maxSubnormal() {
+        return convert<binary64_t, storage_format>(ldexp(1.0 - machineEpsilon(), 1 - emax));
     }
 
-    static constexpr type extra_bit() {
-         if constexpr (std::is_same_v<type, __half>) {
+    static constexpr storage_format minNormal() {
+        return convert<binary64_t, storage_format>(ldexp(1.0, 1 - emax));
+    }
+
+    static constexpr storage_format maxNormal() {
+        return convert<binary64_t, storage_format>(ldexp(1 + (1 - machineEpsilon()), emax));
+    }
+
+    // SUbnormal half way
+    static constexpr storage_format midwaySubnormal() {
+        return convert<binary64_t, storage_format>(ldexp(1.0, -emax));
+    }
+
+    static constexpr storage_format extra_bit() {
+         if constexpr (std::is_same_v<storage_format, __half>) {
         return __float2half(1.0f) / __float2half(ldexpf(1.0f, precision));
     } else {
-            return static_cast<type>(std::ldexp(1.0, -1*precision));
+            return static_cast<storage_format>(std::ldexp(1.0, -precision));
         }
     }
 
-    //static constexpr type minNormal() {
-      //  return type(1) / (type(1) << (emax - precision));
+    //static constexpr storage_format minNormal() {
+      //  return storage_format(1) / (storage_format(1) << (emax - precision));
     //}
 
-    static constexpr type one() {
-        return type(1);
+    static constexpr storage_format constant(binary64_t x) {
+        return convert<binary64_t, storage_format>(x);
     }
 
-    static constexpr type two() {
-        return type(2);
+    static constexpr storage_format one() {
+        return storage_format(1);
     }
 
-    static constexpr type four() {
-        return type(4);
+    static constexpr storage_format two() {
+        return storage_format(2);
     }
 
-    static constexpr type signedZero() {
-        return type(-0.0);
+    static constexpr storage_format four() {
+        return storage_format(4);
+    }
+
+    static constexpr storage_format signedZero() {
+        return storage_format(-0.0);
     }
 };
 

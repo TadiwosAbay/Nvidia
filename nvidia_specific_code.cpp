@@ -1,12 +1,26 @@
 #include <mma.h>
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
-#include "fp_utils.h"
+
+#include <cuda_fp16.h>
+#include <cuda_bf16.h>
 
 using namespace nvcuda;
 
 using binary16_t = half;
 using bfloat16_t = nv_bfloat16;
+
+#include "fp_utils.h"
+
+std::ostream& operator<<(std::ostream& os, const half& h_value) {
+    unsigned short us_value = *(unsigned short *)(&h_value);
+    for (int i = 15; i >= 0; i--) {
+        os << ((us_value >> i) & 1);
+        if (i == 15 || i == 10)
+            os << " ";
+    }
+    return os;
+}
 
 /* Compute C += A*B, where A, B, and C are 16x16x16 matrices.
    The matrix C is initialized to 0 when `init` is true. */
@@ -151,7 +165,7 @@ __global__ void wmma_ker(binary64_t *A, binary64_t *B, return_t *C, bool init) {
 
 template <typename input_t, typename return_t>
 MFMAWrapper<input_t, return_t>::MFMAWrapper(size_t M, size_t N, size_t K) :
-                         M(M), N(N), K(K), LDA(K), LDB(N), LDC(N),
+                         M(M), N(N), K(K),
                          A_size(M * K), B_size(K * N), C_size(M * N),
                          A(A_size), B(B_size), C(C_size) {
     cudaMalloc(&A_d, 4 * 4 * sizeof(input_t));
