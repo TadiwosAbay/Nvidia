@@ -11,39 +11,39 @@ class IEEEFloatFormat {
 public:
     static constexpr int precision = Precision;
     static constexpr int emax = Emax;
-    using type = storage_format;
+    using storageFormat = storage_format;
 
-    static constexpr type minSubnormal() {
-        return static_cast<type>(constexpr_ldexp<2 - emax - precision>(1));
-    }
-
-    static constexpr type largestSubnormal() {
-        return (type(1) - std::numeric_limits<type>::epsilon()) * minNormal();
-    }
-    static constexpr type minNormal() {
-        return type(1) / (type(1) << (emax - precision));
-    }
-    static constexpr type minimumNormal() {
-        return type(1) / (type(1) << (emax-1));
-    }
-    static constexpr type largeSubnormal() {
-        return type(1) / (type(1) << (emax));
+    static constexpr storageFormat minSubnormal() {
+        return static_cast<storageFormat>(constexpr_ldexp<2 - emax - precision>(1));
     }
 
-    static constexpr type one() {
-        return type(1);
+    static constexpr storageFormat largestSubnormal() {
+        return (storageFormat(1) - std::numeric_limits<storageFormat>::epsilon()) * minNormal();
+    }
+    static constexpr storageFormat minNormal() {
+        return storageFormat(1) / (storageFormat(1) << (emax - precision));
+    }
+    static constexpr storageFormat minimumNormal() {
+        return storageFormat(1) / (storageFormat(1) << (emax-1));
+    }
+    static constexpr storageFormat largeSubnormal() {
+        return storageFormat(1) / (storageFormat(1) << (emax));
     }
 
-    static constexpr type two() {
-        return type(2);
+    static constexpr storageFormat one() {
+        return storageFormat(1);
     }
 
-    static constexpr type four() {
-        return type(4);
+    static constexpr storageFormat two() {
+        return storageFormat(2);
     }
 
-    static constexpr type signedZero() {
-        return type(-0.0);
+    static constexpr storageFormat four() {
+        return storageFormat(4);
+    }
+
+    static constexpr storageFormat signedZero() {
+        return storageFormat(-0.0);
     }
 };
 

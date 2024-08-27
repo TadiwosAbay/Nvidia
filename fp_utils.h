@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <limits>
+#include "nvidia_specific_code.h"
 
 using binary32_t = float;
 using binary64_t = double;
@@ -22,40 +23,56 @@ constexpr T constexpr_ldexp(T x) {
  * All constants are computed in binary64 arithetmic and converted to the
  * target precision by the `convert` function.
  */
-template <typename storage_format, int Precision, int Emax>
+template <typename storage_format, size_t Precision, size_t Emax>
 class IEEEFloatFormat {
 public:
-    static constexpr size_t precision = Precision;
-    static constexpr size_t emax = Emax;
-    using type = storage_format;
+    static constexpr int precision = Precision;
+    static constexpr int emax = Emax;
+    using storageFormat = storage_format;
+
+    static bool isNormal(storage_format x) {
+        return (x >= minNormal() && x <= maxNormal()) ||
+            (x >= -maxNormal() && x <= -minNormal());
+    }
+
+    static bool isSubnormal(storage_format x) {
+        return x >= -maxSubnormal() && x <= maxSubnormal() && x != convert<binary64_t, storage_format>(0);
+    }
 
     static constexpr storage_format unitRoundoff() {
-        return convert<binary64_t, storage_format>(ldexp(1.0, -precision));
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, -precision));
     }
 
     static constexpr storage_format machineEpsilon() {
-        return convert<binary64_t, storage_format>(ldexp(1.0, 1-precision));
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, 1 - precision));
     }
 
     static constexpr storage_format minSubnormal() {
-        return convert<binary64_t, storage_format>(ldexp(1.0, 2 - emax - precision));
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, 2 - emax - precision));
     }
 
     static constexpr storage_format maxSubnormal() {
-        return convert<binary64_t, storage_format>(ldexp(1.0 - machineEpsilon(), 1 - emax));
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0 - ldexp(1.0, 1 - precision), 1 - emax));
     }
 
     static constexpr storage_format minNormal() {
-        return convert<binary64_t, storage_format>(ldexp(1.0, 1 - emax));
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, 1 - emax));
     }
 
     static constexpr storage_format maxNormal() {
-        return convert<binary64_t, storage_format>(ldexp(1 + (1 - machineEpsilon()), emax));
+        return convert<binary64_t, storage_format>
+            (ldexp(2.0 - ldexp(1.0, -precision), emax));
     }
 
     // SUbnormal half way
     static constexpr storage_format midwaySubnormal() {
-        return convert<binary64_t, storage_format>(ldexp(1.0, -emax));
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, -emax));
     }
 
     static constexpr storage_format extra_bit() {

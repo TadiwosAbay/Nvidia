@@ -1,23 +1,52 @@
-template <typename input_t, typename return_t>
+// fp_utils.h
+#ifndef MFMA_H
+#define MFMA_H
+
+template <typename InputFormat, typename OutputFormat>
 class MFMAWrapper {
 
     private:
         size_t M, N, K, A_size, B_size, C_size;
 
-        input_t *A_d, *B_d;
-        return_t *C_d;
+        using input_t = typename InputFormat::storageFormat;
+        using output_t = typename OutputFormat::storageFormat;
 
-        bool produces_normals_from_subnormals() {
+        input_t *A_d, *B_d;
+        output_t *C_d;
+
+        bool produces_subnormals_from_subnormals() {
             reset_host_matrices();
-            return true;
+            A[0] = InputFormat::constant(0.5);
+            B[0] = InputFormat::maxSubnormal();
+            run_mfma_kernel();
+            return InputFormat::isSubnormal(C[0]) ? true : false;
+        }
+
+        bool keeps_subnormals_in_accumulator() {
+            reset_host_matrices();
+            C[0] = OutputFormat::minSubnormal();
+            run_mfma_kernel();
+            return InputFormat::isSubnormal(C[0]) ? true : false;
         }
 
         bool produces_subnormals_from_normals() {
-            return true;
+            reset_host_matrices();
+            A[0] = InputFormat::constant(0.5);
+            B[0] = InputFormat::minNormal();
+            run_mfma_kernel();
+            return InputFormat::isSubnormal(C[0]) ? true : false;
         }
 
-        bool accumulates_subnormals() {
-            return true;
+        bool produces_normals_from_subnormals() {
+            reset_host_matrices();
+            A[0] = InputFormat::constant(2);
+            B[0] = InputFormat::midwaySubnormal();
+            run_mfma_kernel();
+            return InputFormat::isNormal(C[0]) ? true : false;
+        }
+
+        bool partial_products_are_exact() {
+            
         }
 
         bool has_one_extra_bit() {
@@ -26,7 +55,7 @@ class MFMAWrapper {
 
     public:
         std::vector<input_t> A, B;
-        std::vector<return_t> C;
+        std::vector<output_t> C;
 
     MFMAWrapper(size_t M, size_t N, size_t K);
 
@@ -43,6 +72,11 @@ class MFMAWrapper {
     void run_mfma_kernel();
 
     void run_test() {
+        if (produces_subnormals_from_subnormals()) {
+            std::cout << "Produces subnormals from subnormals." << std::endl;
+        } else {
+            std::cout << "Does not produce subnormals from subnormals." << std::endl;
+        }
         if (produces_normals_from_subnormals()) {
             std::cout << "Produces normals from subnormals." << std::endl;
         } else {
@@ -61,3 +95,5 @@ class MFMAWrapper {
     }
 
 };
+
+#endif // MFMA_H

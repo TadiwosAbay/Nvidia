@@ -40,12 +40,12 @@ bool gpuArchCheck(const std::string arch) {
  *
  * ./matrix_calculator.py --architecture cdna2 --instruction v_mfma_f32_16x16x16f16 --detail-instruction
  */
-template <typename input_t, typename return_t>
-__global__ void run_mfma(const input_t *A, const input_t *B, return_t *C,
+template <typename input_t, typename output_t>
+__global__ void run_mfma(const input_t *A, const input_t *B, output_t *C,
                          const size_t LDA, const size_t LDB, const size_t LDC) {
 
     using input_lane = __attribute__((__vector_size__(4 * sizeof(input_t)))) input_t;
-    using output_lane = __attribute__((__vector_size__(4 * sizeof(return_t)))) return_t;
+    using output_lane = __attribute__((__vector_size__(4 * sizeof(output_t)))) output_t;
 
     output_lane C_VGPR; // Stored by rows.
 
@@ -106,13 +106,13 @@ void MFMAWrapper::run_mfma_kernel() {
     // Populate device buffers
     HIP_CHECK(hipMemcpy(A_d, A.data(), A_size * sizeof(input_t), hipMemcpyHostToDevice));
     HIP_CHECK(hipMemcpy(B_d, B.data(), B_size * sizeof(input_t), hipMemcpyHostToDevice));
-    HIP_CHECK(hipMemcpy(C_d, C.data(), C_size * sizeof(return_t), hipMemcpyHostToDevice));
+    HIP_CHECK(hipMemcpy(C_d, C.data(), C_size * sizeof(output_t), hipMemcpyHostToDevice));
 
     run_mfma<<<1, dim3(16, 4)>>>(A_d, M, B_d, N, C_d, N);
     HIP_CHECK(hipGetLastError());
 
     // Copy result back to host
-    HIP_CHECK(hipMemcpy(C.data(), C_d, C_size * sizeof(return_t), hipMemcpyDeviceToHost));
+    HIP_CHECK(hipMemcpy(C.data(), C_d, C_size * sizeof(output_t), hipMemcpyDeviceToHost));
 }
 
 // Following code comes from main().
