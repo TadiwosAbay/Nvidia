@@ -59,15 +59,28 @@ class MFMAWrapper {
         }
 
         /*
-         * Test behaviour of accumulator.
+         * Accuracy of partial products.
          */
         bool partial_products_are_exact() {
             return true;
         }
 
+        /*
+         * Extra bits and rounding modes.
+         */
         bool has_one_extra_bit() {
             return true;
         }
+
+
+        /*
+         * Size of the FMA.
+         */
+
+
+        /*
+         * Accumulation order.
+         */
 
     public:
         std::vector<input_t> A, B;
