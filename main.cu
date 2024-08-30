@@ -3,12 +3,14 @@
 //#include <vector>
 #include <random>
 #include <cmath>
-#include "test.cu"
 
 //#include "MFMAWrapper.h"
 //#include "nvidia_specific_code.cpp"
+#include "utils.cpp"
+
+#include "nvidia_specific_code.h"
+#include "test.cu"
 #include "fp_utils.h"
-//#include "utils.cpp"
 
 int main(){
 
@@ -17,7 +19,7 @@ int main(){
     //constexpr size_t K = 4;
 
     // Initialization.
-    run_tests<binary16, binary16>();
+    run_tests<binary16, binary32>();
     //auto mw = MFMAWrapper<float, float>(M, N, K);
     //auto mw_float = MFMAWrapper<float, float>(M, N, K);
 

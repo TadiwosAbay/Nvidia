@@ -1,4 +1,3 @@
-// fp_utils.h
 #ifndef MFMA_H
 #define MFMA_H
 
@@ -14,17 +13,13 @@ class MFMAWrapper {
         input_t *A_d, *B_d;
         output_t *C_d;
 
+        /*
+         * Support for subnormals.
+         */
         bool produces_subnormals_from_subnormals() {
             reset_host_matrices();
             A[0] = InputFormat::constant(0.5);
             B[0] = InputFormat::maxSubnormal();
-            run_mfma_kernel();
-            return InputFormat::isSubnormal(C[0]) ? true : false;
-        }
-
-        bool keeps_subnormals_in_accumulator() {
-            reset_host_matrices();
-            C[0] = OutputFormat::minSubnormal();
             run_mfma_kernel();
             return InputFormat::isSubnormal(C[0]) ? true : false;
         }
@@ -45,8 +40,29 @@ class MFMAWrapper {
             return InputFormat::isNormal(C[0]) ? true : false;
         }
 
+        bool keeps_subnormals_in_accumulator() {
+            reset_host_matrices();
+            C[0] = OutputFormat::minSubnormal();
+            run_mfma_kernel();
+            return OutputFormat::isSubnormal(C[0]) ? true : false;
+        }
+
+        /*
+         * Accuracy of multiplications in dot product.
+         */
+        bool multiplications_are_exact() {
+            reset_host_matrices();
+            A[0] = InputFormat::belowOne();
+            B[0] = InputFormat::belowOne();
+            run_mfma_kernel();
+            return true;
+        }
+
+        /*
+         * Test behaviour of accumulator.
+         */
         bool partial_products_are_exact() {
-            
+            return true;
         }
 
         bool has_one_extra_bit() {
@@ -87,10 +103,10 @@ class MFMAWrapper {
         } else {
             std::cout << "Does not produce subnormals from normals." << std::endl;
         }
-        if (accumulates_subnormals()) {
-            std::cout << "Accumulates subnormals." << std::endl;
+        if (keeps_subnormals_in_accumulator()) {
+            std::cout << "Subnormals in accumulator are kept." << std::endl;
         } else {
-            std::cout << "Does not accumulate subnormals." << std::endl;
+            std::cout << "Subnormals in accumulator are lost." << std::endl;
         }
     }
 

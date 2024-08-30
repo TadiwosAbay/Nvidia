@@ -49,9 +49,20 @@ public:
             (ldexp(1.0, 1 - precision));
     }
 
+    static constexpr storage_format beforeOne() {
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0 - ldexp(1.0, -precision), 1));
+    }
+
     static constexpr storage_format minSubnormal() {
         return convert<binary64_t, storage_format>
             (ldexp(1.0, 2 - emax - precision));
+    }
+
+    // This is MinNormal() / 2.
+    static constexpr storage_format midwaySubnormal() {
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, -emax));
     }
 
     static constexpr storage_format maxSubnormal() {
@@ -69,12 +80,6 @@ public:
             (ldexp(2.0 - ldexp(1.0, -precision), emax));
     }
 
-    // SUbnormal half way
-    static constexpr storage_format midwaySubnormal() {
-        return convert<binary64_t, storage_format>
-            (ldexp(1.0, -emax));
-    }
-
     static constexpr storage_format extra_bit() {
          if constexpr (std::is_same_v<storage_format, __half>) {
         return __float2half(1.0f) / __float2half(ldexpf(1.0f, precision));
@@ -82,10 +87,6 @@ public:
             return static_cast<storage_format>(std::ldexp(1.0, -precision));
         }
     }
-
-    //static constexpr storage_format minNormal() {
-      //  return storage_format(1) / (storage_format(1) << (emax - precision));
-    //}
 
     static constexpr storage_format constant(binary64_t x) {
         return convert<binary64_t, storage_format>(x);
