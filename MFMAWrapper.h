@@ -170,6 +170,13 @@ class MFMAWrapper {
         } else {
             std::cout << "Subnormals in accumulator are lost." << std::endl;
         }
+        if(has_one_extra_bit()) {
+            std::cout << "has one extra bit."<<std::endl;
+        }
+        else {
+            std::cout << "Doesn't have extra bit." <std::endl;
+        }
+        
     }
 
 };
