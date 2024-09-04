@@ -6,6 +6,7 @@
 #include <cuda_bf16.h>
 
 #include "MFMAWrapper.h"
+#include "wmma_kernels.h"
 
 using namespace nvcuda;
 
@@ -74,33 +75,33 @@ std::ostream& operator<<(std::ostream& os, const half& h_value) {
     //wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
 //}
 
-template <typename input_t, typename return_t>
-__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false);
+//template <typename input_t, typename return_t>
+//__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false);
 
 
-template <typename input_t, typename return_t>
-__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init ) {
+//template <typename input_t, typename return_t>
+//__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init ) {
     // Static assert to catch unsupported types at compile time
     //static_assert(sizeof(input_t) == 0, "Unsupported input type");
-}
+//}
 
 // Specialization for binary16_t (using SFINAE)
-template <typename return_t>
-__global__ void wmma_ker<binary16_t,binary16_t>(binary16_t *A, binary16_t *B, return_t *C, bool init) {
-    wmma::fragment<wmma::matrix_a, 16, 16, 16, binary16_t, wmma::row_major> A_fragment;
-    wmma::fragment<wmma::matrix_b, 16, 16, 16, binary16_t, wmma::col_major> B_fragment;
-    wmma::fragment<wmma::accumulator, 16, 16, 16, return_t> C_fragment;
+//template <typename return_t>
+//__global__ void wmma_ker<binary16_t,binary16_t>(binary16_t *A, binary16_t *B, return_t *C, bool init) {
+  //  wmma::fragment<wmma::matrix_a, 16, 16, 16, binary16_t, wmma::row_major> A_fragment;
+   // wmma::fragment<wmma::matrix_b, 16, 16, 16, binary16_t, wmma::col_major> B_fragment;
+   // wmma::fragment<wmma::accumulator, 16, 16, 16, return_t> C_fragment;
 
-    wmma::load_matrix_sync(A_fragment, A, 16);
-    wmma::load_matrix_sync(B_fragment, B, 16);
-    if (init)
-        wmma::fill_fragment(C_fragment, 0.0f);
-    else
-        wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
+    //wmma::load_matrix_sync(A_fragment, A, 16);
+    //wmma::load_matrix_sync(B_fragment, B, 16);
+    //if (init)
+      //  wmma::fill_fragment(C_fragment, 0.0f);
+    //else
+      //  wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
 
-    wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
-    wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
-}
+//    wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
+  //  wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
+//}
 
 //// Specialization for binary32_t (float)
 //template <typename return_t>
