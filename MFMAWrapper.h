@@ -21,9 +21,9 @@ class MFMAWrapper {
             A[0] = InputFormat::constant(0.5);
             B[0] = InputFormat::maxSubnormal();
             run_mfma_kernel();
-            print_matrix(mw.A, M, N, true);
-            print_matrix(mw.B, M, N, false);
-            print_matrix(mw.C, M, N, true);
+            print_matrix(A, M, N, true);
+            print_matrix(B, M, N, false);
+            print_matrix(C, M, N, true);
             return InputFormat::isSubnormal(C[0]) ? true : false;
         }
 
