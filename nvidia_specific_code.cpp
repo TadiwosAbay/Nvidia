@@ -5,6 +5,8 @@
 #include <cuda_fp16.h>
 #include <cuda_bf16.h>
 
+#include "MFMAWrapper.h"
+
 using namespace nvcuda;
 
 using binary16_t = half;
