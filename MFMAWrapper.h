@@ -1,6 +1,9 @@
 #ifndef MFMA_H
 #define MFMA_H
 
+
+#include "custom_print.h"
+
 template <typename InputFormat, typename OutputFormat>
 class MFMAWrapper {
 
