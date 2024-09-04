@@ -76,8 +76,8 @@ class MFMAWrapper {
          */
         bool has_one_extra_bit() {
             reset_host_matrices();
-            A[0] = InputFormat::One();
-            B[0] = InputFormat::One();
+            A[0] = InputFormat::one();
+            B[0] = InputFormat::one();
             C[0] = InputFormat::unitRoundoff();
             run_mfma_kernel();
             return OutputFormat::isOne(C[0]) ? true:false;
