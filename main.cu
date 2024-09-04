@@ -5,7 +5,7 @@
 #include <cmath>
 
 //#include "MFMAWrapper.h"
-#include "nvidia_specific_code.cpp"
+#include "nvidia_specific_code.h"
 #include "utils.cpp"
 
 //#include "nvidia_specific_code.h"

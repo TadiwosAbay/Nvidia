@@ -1,9 +1,6 @@
 #ifndef MFMA_H
 #define MFMA_H
 
-
-#include "custom_print.h"
-
 template <typename InputFormat, typename OutputFormat>
 class MFMAWrapper {
 
@@ -24,9 +21,6 @@ class MFMAWrapper {
             A[0] = InputFormat::constant(0.5);
             B[0] = InputFormat::maxSubnormal();
             run_mfma_kernel();
-            print_matrix(A, M, N, true);
-            print_matrix(B, M, N, false);
-            print_matrix(C, M, N, true);
             return InputFormat::isSubnormal(C[0]) ? true : false;
         }
 
@@ -80,8 +74,7 @@ class MFMAWrapper {
             B[0] = InputFormat::one();
             C[0] = InputFormat::unitRoundoff();
             run_mfma_kernel();
-            return OutputFormat::isOne(C[0]) ? true:false;
-            
+            return OutputFormat::isOne(C[0]) ? true : false;
         }
 
 
@@ -98,23 +91,12 @@ class MFMAWrapper {
         std::vector<input_t> A, B;
         std::vector<output_t> C;
 
-    //MFMAWrapper(size_t M, size_t N, size_t K);
+    MFMAWrapper(size_t M, size_t N, size_t K);
 
-    MFMAWrapper(size_t M, size_t N, size_t K)
-        : M(M), N(N), K(K), A_size(M * K), B_size(K * N), C_size(M * N),
-          A(A_size), B(B_size), C(C_size) {
-        cudaMalloc(&A_d, A_size * sizeof(input_t));
-        cudaMalloc(&B_d, B_size * sizeof(input_t));
-        cudaMalloc(&C_d, C_size * sizeof(output_t));
-    }
+    ~MFMAWrapper();
 
-  //  ~MFMAWrapper();
-
-    ~MFMAWrapper() {
-        cudaFree(C_d);
-        cudaFree(B_d);
-        cudaFree(A_d);
-    }
+    /* Run MFMA kernel on device. */
+    void run_mfma_kernel();
 
     /* Set the entries of host arrays to zero. */
     void reset_host_matrices() {
@@ -123,32 +105,6 @@ class MFMAWrapper {
         C.assign(C.size(), 0);
     };
 
-    void print_matrix(const std::vector<input_t>& A,
-                  const size_t rows,
-                  const size_t cols,
-                  const bool bycols) {
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      std::cout << std::setw(6);
-      auto next_element = bycols ? A[j*cols+i] : A[i*rows+j];
-      std::cout << next_element << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-}
-    /* Run MFMA kernel on device. */
-   // void run_mfma_kernel();
-    void run_mfma_kernel() {
-        cudaMemcpy(A_d, A.data(), A_size * sizeof(input_t), cudaMemcpyHostToDevice);
-        cudaMemcpy(B_d, B.data(), B_size * sizeof(input_t), cudaMemcpyHostToDevice);
-        cudaMemcpy(C_d, C.data(), C_size * sizeof(output_t), cudaMemcpyHostToDevice);
-
-        // Call the WMMA kernel
-        wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
-
-        cudaMemcpy(C.data(), C_d, C_size * sizeof(output_t), cudaMemcpyDeviceToHost);
-    }
     void run_test() {
         if (produces_subnormals_from_subnormals()) {
             std::cout << "Produces subnormals from subnormals." << std::endl;
@@ -171,10 +127,10 @@ class MFMAWrapper {
             std::cout << "Subnormals in accumulator are lost." << std::endl;
         }
         if(has_one_extra_bit()) {
-            std::cout << "has one extra bit."<<std::endl;
+            std::cout << "Accumulator has one extra bit."<<std::endl;
         }
         else {
-            std::cout << "Doesn't have extra bit." <<std::endl;
+            std::cout << "Accumulator does not have extra bits." <<std::endl;
         }
         
     }
