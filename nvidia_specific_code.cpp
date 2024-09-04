@@ -166,30 +166,30 @@ std::ostream& operator<<(std::ostream& os, const half& h_value) {
 //}
 
 
-template <typename input_t, typename return_t>
-MFMAWrapper<input_t, return_t>::MFMAWrapper(size_t M, size_t N, size_t K) :
-                         M(M), N(N), K(K),
-                         A_size(M * K), B_size(K * N), C_size(M * N),
-                         A(A_size), B(B_size), C(C_size) {
-    cudaMalloc(&A_d, 4 * 4 * sizeof(input_t));
-    cudaMalloc(&B_d, 4 * 4 * sizeof(input_t));
-    cudaMalloc(&C_d, 4 * 4 * sizeof(return_t));
-}
+//template <typename input_t, typename return_t>
+//MFMAWrapper<input_t, return_t>::MFMAWrapper(size_t M, size_t N, size_t K) :
+  //                       M(M), N(N), K(K),
+    //                     A_size(M * K), B_size(K * N), C_size(M * N),
+      //                   A(A_size), B(B_size), C(C_size) {
+    //cudaMalloc(&A_d, 4 * 4 * sizeof(input_t));
+//    cudaMalloc(&B_d, 4 * 4 * sizeof(input_t));
+  //  cudaMalloc(&C_d, 4 * 4 * sizeof(return_t));
+//}
 
-template <typename input_t, typename return_t>
-MFMAWrapper<input_t, return_t>::~MFMAWrapper() {
-    cudaFree(C_d);
-    cudaFree(B_d);
-    cudaFree(A_d);
-}
+//template <typename input_t, typename return_t>
+//MFMAWrapper<input_t, return_t>::~MFMAWrapper() {
+  //  cudaFree(C_d);
+    //cudaFree(B_d);
+    //cudaFree(A_d);
+//}
 
-template <typename input_t, typename return_t>
-void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
+//template <typename input_t, typename return_t>
+//void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
 
     // Copy input from host to device.
-    cudaMemcpy(A_d, A.data(), A_size * sizeof(input_t), cudaMemcpyHostToDevice);
-    cudaMemcpy(B_d, B.data(), B_size * sizeof(input_t), cudaMemcpyHostToDevice);
-    cudaMemcpy(C_d, C.data(), C_size * sizeof(return_t), cudaMemcpyHostToDevice);
+  //  cudaMemcpy(A_d, A.data(), A_size * sizeof(input_t), cudaMemcpyHostToDevice);
+    //cudaMemcpy(B_d, B.data(), B_size * sizeof(input_t), cudaMemcpyHostToDevice);
+    //cudaMemcpy(C_d, C.data(), C_size * sizeof(return_t), cudaMemcpyHostToDevice);
 
     // Perform matrix multiplication.
    //if (std::is_same<input_t, float>::value)
@@ -209,5 +209,5 @@ void MFMAWrapper<input_t, return_t>::run_mfma_kernel() {
     wmma_ker<<<1,32>>>(A_d, B_d, C_d);
 
     // Copy result from device to host.
-    cudaMemcpy(C.data(), C_d, C_size * sizeof(return_t), cudaMemcpyDeviceToHost);
-}
+    //cudaMemcpy(C.data(), C_d, C_size * sizeof(return_t), cudaMemcpyDeviceToHost);
+//}
