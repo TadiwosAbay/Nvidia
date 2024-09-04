@@ -71,11 +71,17 @@ class MFMAWrapper {
             return true;
         }
 
-        /*
+        /*  ADDED code here
          * Extra bits and rounding modes.
          */
         bool has_one_extra_bit() {
-            return true;
+            reset_host_matrices();
+            A[0] = InputFormat::One();
+            B[0] = InputFormat::One();
+            C[0] = InputFormat::unitRoundoff();
+            run_mfma_kernel();
+            return OutputFormat::isOne(C[0]) ? true:false;
+            
         }
 
 
