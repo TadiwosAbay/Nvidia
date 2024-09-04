@@ -174,7 +174,7 @@ class MFMAWrapper {
             std::cout << "has one extra bit."<<std::endl;
         }
         else {
-            std::cout << "Doesn't have extra bit." <std::endl;
+            std::cout << "Doesn't have extra bit." <<std::endl;
         }
         
     }
