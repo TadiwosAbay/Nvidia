@@ -84,7 +84,7 @@ __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false)
 
 // Specialization for binary16_t (using SFINAE)
 template <typename return_t>
-__global__ void wmma_ker(binary16_t *A, binary16_t *B, return_t *C, bool init) {
+__global__ void wmma_ker<binary16_t,binary16_t>(binary16_t *A, binary16_t *B, return_t *C, bool init) {
     wmma::fragment<wmma::matrix_a, 16, 16, 16, binary16_t, wmma::row_major> A_fragment;
     wmma::fragment<wmma::matrix_b, 16, 16, 16, binary16_t, wmma::col_major> B_fragment;
     wmma::fragment<wmma::accumulator, 16, 16, 16, return_t> C_fragment;
@@ -102,7 +102,7 @@ __global__ void wmma_ker(binary16_t *A, binary16_t *B, return_t *C, bool init) {
 
 //// Specialization for binary32_t (float)
 //template <typename return_t>
-//__global__ void wmma_ker(binary32_t *A, binary32_t *B, return_t *C, bool init) {
+//__global__ void wmma_ker<binary32_t,binary32_t>(binary32_t *A, binary32_t *B, return_t *C, bool init) {
   //  wmma::fragment<wmma::matrix_a, 16, 16, 8, wmma::precision::tf32, wmma::row_major> A_fragment;
    // wmma::fragment<wmma::matrix_b, 16, 16, 8, wmma::precision::tf32, wmma::col_major> B_fragment;
     //wmma::fragment<wmma::accumulator, 16, 16, 8, return_t> C_fragment;
@@ -123,7 +123,7 @@ __global__ void wmma_ker(binary16_t *A, binary16_t *B, return_t *C, bool init) {
 
 //// Specialization for binary64_t (double)
 //template <typename return_t>
-//__global__ void wmma_ker(binary64_t *A, binary64_t *B, return_t *C, bool init) {
+//__global__ void wmma_ker<binary64_t,binary64_t>(binary64_t *A, binary64_t *B, return_t *C, bool init) {
   //  wmma::fragment<wmma::matrix_a, 8, 8, 4, double, wmma::row_major> A_fragment;
     //wmma::fragment<wmma::matrix_b, 8, 8, 4, double, wmma::col_major> B_fragment;
     //wmma::fragment<wmma::accumulator, 8, 8, 4, return_t> C_fragment;
