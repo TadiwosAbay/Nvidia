@@ -15,15 +15,15 @@ using bfloat16_t = nv_bfloat16;
 
 #include "fp_utils.h"
 
-std::ostream& operator<<(std::ostream& os, const half& h_value) {
-    unsigned short us_value = *(unsigned short *)(&h_value);
-    for (int i = 15; i >= 0; i--) {
-        os << ((us_value >> i) & 1);
-        if (i == 15 || i == 10)
-            os << " ";
-    }
-    return os;
-}
+//std::ostream& operator<<(std::ostream& os, const half& h_value) {
+  //  unsigned short us_value = *(unsigned short *)(&h_value);
+    //for (int i = 15; i >= 0; i--) {
+      //  os << ((us_value >> i) & 1);
+       // if (i == 15 || i == 10)
+         //   os << " ";
+    //}
+    //return os;
+//}
 
 /* Compute C += A*B, where A, B, and C are 16x16x16 matrices.
    The matrix C is initialized to 0 when `init` is true. */
