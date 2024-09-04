@@ -5,10 +5,10 @@
 #include <cmath>
 
 //#include "MFMAWrapper.h"
-//#include "nvidia_specific_code.cpp"
+#include "nvidia_specific_code.cpp"
 #include "utils.cpp"
 
-#include "nvidia_specific_code.h"
+//#include "nvidia_specific_code.h"
 #include "test.cu"
 #include "fp_utils.h"
 
