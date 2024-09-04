@@ -21,6 +21,9 @@ class MFMAWrapper {
             A[0] = InputFormat::constant(0.5);
             B[0] = InputFormat::maxSubnormal();
             run_mfma_kernel();
+            print_matrix(mw.A, M, N, true);
+            print_matrix(mw.B, M, N, false);
+            print_matrix(mw.C, M, N, true);
             return InputFormat::isSubnormal(C[0]) ? true : false;
         }
 
@@ -111,6 +114,20 @@ class MFMAWrapper {
         C.assign(C.size(), 0);
     };
 
+    void print_matrix(const std::vector<float_type>& A,
+                  const size_t rows,
+                  const size_t cols,
+                  const bool bycols) {
+  for (size_t i = 0; i < rows; i++) {
+    for (size_t j = 0; j < cols; j++) {
+      std::cout << std::setw(6);
+      auto next_element = bycols ? A[j*cols+i] : A[i*rows+j];
+      std::cout << next_element << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+}
     /* Run MFMA kernel on device. */
    // void run_mfma_kernel();
     void run_mfma_kernel() {
