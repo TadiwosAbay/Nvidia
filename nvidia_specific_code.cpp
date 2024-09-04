@@ -77,7 +77,7 @@ __global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false)
 
 
 template <typename input_t, typename return_t>
-__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init = false) {
+__global__ void wmma_ker(input_t *A, input_t *B, return_t *C, bool init ) {
     // Static assert to catch unsupported types at compile time
     //static_assert(sizeof(input_t) == 0, "Unsupported input type");
 }
