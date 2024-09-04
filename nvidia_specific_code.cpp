@@ -100,50 +100,50 @@ __global__ void wmma_ker(binary16_t *A, binary16_t *B, return_t *C, bool init) {
     wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
 }
 
-// Specialization for binary32_t (float)
-template <typename return_t>
-__global__ void wmma_ker(binary32_t *A, binary32_t *B, return_t *C, bool init) {
-    wmma::fragment<wmma::matrix_a, 16, 16, 8, wmma::precision::tf32, wmma::row_major> A_fragment;
-    wmma::fragment<wmma::matrix_b, 16, 16, 8, wmma::precision::tf32, wmma::col_major> B_fragment;
-    wmma::fragment<wmma::accumulator, 16, 16, 8, return_t> C_fragment;
+//// Specialization for binary32_t (float)
+//template <typename return_t>
+//__global__ void wmma_ker(binary32_t *A, binary32_t *B, return_t *C, bool init) {
+  //  wmma::fragment<wmma::matrix_a, 16, 16, 8, wmma::precision::tf32, wmma::row_major> A_fragment;
+   // wmma::fragment<wmma::matrix_b, 16, 16, 8, wmma::precision::tf32, wmma::col_major> B_fragment;
+    //wmma::fragment<wmma::accumulator, 16, 16, 8, return_t> C_fragment;
 
-    for (int iter = 0; iter < 2; iter++) {
-        wmma::load_matrix_sync(A_fragment, A + 8 * iter, 16);
-        wmma::load_matrix_sync(B_fragment, B + 8 * iter, 16);
-        if (init)
-            wmma::fill_fragment(C_fragment, 0.0f);
-        else
-            wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
+    //for (int iter = 0; iter < 2; iter++) {
+      //  wmma::load_matrix_sync(A_fragment, A + 8 * iter, 16);
+       // wmma::load_matrix_sync(B_fragment, B + 8 * iter, 16);
+        //if (init)
+          //  wmma::fill_fragment(C_fragment, 0.0f);
+        //else
+          //  wmma::load_matrix_sync(C_fragment, C, 16, wmma::mem_col_major);
 
-        wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
-       wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
-    }
+  //      wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
+//       wmma::store_matrix_sync(C, C_fragment, 16, wmma::mem_col_major);
+    //}
     
-}
+//}
 
-// Specialization for binary64_t (double)
-template <typename return_t>
-__global__ void wmma_ker(binary64_t *A, binary64_t *B, return_t *C, bool init) {
-    wmma::fragment<wmma::matrix_a, 8, 8, 4, double, wmma::row_major> A_fragment;
-    wmma::fragment<wmma::matrix_b, 8, 8, 4, double, wmma::col_major> B_fragment;
-    wmma::fragment<wmma::accumulator, 8, 8, 4, return_t> C_fragment;
+//// Specialization for binary64_t (double)
+//template <typename return_t>
+//__global__ void wmma_ker(binary64_t *A, binary64_t *B, return_t *C, bool init) {
+  //  wmma::fragment<wmma::matrix_a, 8, 8, 4, double, wmma::row_major> A_fragment;
+    //wmma::fragment<wmma::matrix_b, 8, 8, 4, double, wmma::col_major> B_fragment;
+    //wmma::fragment<wmma::accumulator, 8, 8, 4, return_t> C_fragment;
 
-    int warpM = threadIdx.x / 32;
-    int warpN = threadIdx.y;
+    //int warpM = threadIdx.x / 32;
+    //int warpN = threadIdx.y;
 
-    for (int iter = 0; iter < 4; iter++) {
-        wmma::load_matrix_sync(A_fragment, A + warpN * 16 * 8 + iter * 4, 16);
-        wmma::load_matrix_sync(B_fragment, B + iter * 4 + warpM * 16 * 8, 16);
-        if (init)
-            wmma::fill_fragment(C_fragment, 0.0f);
-        else
-            wmma::load_matrix_sync(C_fragment, C + warpM * 8 + warpN * 16 * 8, 16, wmma::mem_row_major);
+    //for (int iter = 0; iter < 4; iter++) {
+      //  wmma::load_matrix_sync(A_fragment, A + warpN * 16 * 8 + iter * 4, 16);
+        //wmma::load_matrix_sync(B_fragment, B + iter * 4 + warpM * 16 * 8, 16);
+        //if (init)
+          //  wmma::fill_fragment(C_fragment, 0.0f);
+        //else
+          //  wmma::load_matrix_sync(C_fragment, C + warpM * 8 + warpN * 16 * 8, 16, wmma::mem_row_major);
 
-        wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
-       wmma::store_matrix_sync(C + warpM * 8 + warpN * 16 * 8, C_fragment, 16, wmma::mem_row_major);
-    }
+        //wmma::mma_sync(C_fragment, A_fragment, B_fragment, C_fragment);
+       //wmma::store_matrix_sync(C + warpM * 8 + warpN * 16 * 8, C_fragment, 16, wmma::mem_row_major);
+    //}
    
-}
+//}
 
 
 
