@@ -36,6 +36,10 @@ public:
             (x >= -maxNormal() && x <= -minNormal());
     }
 
+    static bool isOne( storage_format x) {
+        return x==one();
+    }
+
     static bool isSubnormal(storage_format x) {
         return x >= -maxSubnormal() && x <= maxSubnormal() && x != convert<binary64_t, storage_format>(0);
     }
@@ -93,6 +97,7 @@ public:
         return convert<binary64_t, storage_format>(x);
     }
 
+     
     static constexpr storage_format one() {
         return storage_format(1);
     }
