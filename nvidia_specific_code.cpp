@@ -206,7 +206,7 @@ std::ostream& operator<<(std::ostream& os, const half& h_value) {
         //wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
     //}
     //cublas_matrix_multiply(A_d, B_d, C_d, M, N, K);
-    wmma_ker<<<1,32>>>(A_d, B_d, C_d);
+    //wmma_ker<<<1,32>>>(A_d, B_d, C_d);
 
     // Copy result from device to host.
     //cudaMemcpy(C.data(), C_d, C_size * sizeof(return_t), cudaMemcpyDeviceToHost);
