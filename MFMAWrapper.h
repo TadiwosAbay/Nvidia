@@ -86,9 +86,23 @@ class MFMAWrapper {
         std::vector<input_t> A, B;
         std::vector<output_t> C;
 
-    MFMAWrapper(size_t M, size_t N, size_t K);
+    //MFMAWrapper(size_t M, size_t N, size_t K);
 
-    ~MFMAWrapper();
+    MFMAWrapper(size_t M, size_t N, size_t K)
+        : M(M), N(N), K(K), A_size(M * K), B_size(K * N), C_size(M * N),
+          A(A_size), B(B_size), C(C_size) {
+        cudaMalloc(&A_d, A_size * sizeof(input_t));
+        cudaMalloc(&B_d, B_size * sizeof(input_t));
+        cudaMalloc(&C_d, C_size * sizeof(output_t));
+    }
+
+  //  ~MFMAWrapper();
+
+    ~MFMAWrapper() {
+        cudaFree(C_d);
+        cudaFree(B_d);
+        cudaFree(A_d);
+    }
 
     /* Set the entries of host arrays to zero. */
     void reset_host_matrices() {
@@ -98,8 +112,17 @@ class MFMAWrapper {
     };
 
     /* Run MFMA kernel on device. */
-    void run_mfma_kernel();
+   // void run_mfma_kernel();
+    void run_mfma_kernel() {
+        cudaMemcpy(A_d, A.data(), A_size * sizeof(input_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(B_d, B.data(), B_size * sizeof(input_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(C_d, C.data(), C_size * sizeof(output_t), cudaMemcpyHostToDevice);
 
+        // Call the WMMA kernel
+        wmma_ker<<<1, 32>>>(A_d, B_d, C_d);
+
+        cudaMemcpy(C.data(), C_d, C_size * sizeof(output_t), cudaMemcpyDeviceToHost);
+    }
     void run_test() {
         if (produces_subnormals_from_subnormals()) {
             std::cout << "Produces subnormals from subnormals." << std::endl;
