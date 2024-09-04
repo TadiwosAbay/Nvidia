@@ -114,7 +114,7 @@ class MFMAWrapper {
         C.assign(C.size(), 0);
     };
 
-    void print_matrix(const std::vector<float_type>& A,
+    void print_matrix(const std::vector<input_t>& A,
                   const size_t rows,
                   const size_t cols,
                   const bool bycols) {
