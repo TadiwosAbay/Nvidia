@@ -75,6 +75,49 @@ class MFMAWrapper {
             return OutputFormat::isOne(C[0]) ? false : true;
         }
 
+        bool round_mode() {
+            reset_host_matrices();
+            A[0] = InputFormat::one();
+            A[1] = InputFormat::one();
+            A[2] = InputFormat::one();
+            A[3] = InputFormat::one();
+            B[0] = InputFormat::one();
+            B[1] = InputFormat::half_ulp;
+            B[2] = InputFormat::half_ulp;
+            B[3] = InputFormat::half_ulp;
+            run_mfma_kernel();
+            std::cout << "C[0] = " << C[0] << std::endl;
+            pos_result=C[0];
+            pos_upper=OutputFormat::one()+ OutputFormat::four()*(half_ulp);
+            pos_lower=OutputFormat::one()+ OutputFormat::two()*(half_ulp);
+            return OutputFormat::isOne(C[0]) ? false : true;
+
+            reset_host_matrices();
+            A[0] = InputFormat::minus_one();
+            A[1] = InputFormat::minus_one();
+            A[2] = InputFormat::minus_one();
+            A[3] = InputFormat::minus_one();
+            B[0] = InputFormat::one();
+            B[1] = InputFormat::half_ulp;
+            B[2] = InputFormat::half_ulp;
+            B[3] = InputFormat::half_ulp;
+            run_mfma_kernel();
+            neg_result=C[0];
+            neg_toNeg=OutputFormat::minus_one()+ OutputFormat::minus_four()*(OutputFormat::half_ulp);
+            neg_toPos=OutputFormat::minus_one()+ OutputFormat::minus_two()*(OutputFormat::half_ulp);
+
+            if(pos_result==pos_upper && neg_result==neg_toPos)  //round to infinity
+                return 1;
+            if(pos_result==pos_upper && neg_result==neg_toNeg) //RTN-TE
+                return 2;
+
+            if(pos_result==pos_lower && neg_result==neg_toPos)  //round-to-zero
+                return 3;
+            if(pos_result==pos_lower && neg_result==neg_toNeg) //round to minus infinity
+                return 4;
+            
+        }
+
 
         /*
          * Size of the FMA.
@@ -156,6 +199,20 @@ class MFMAWrapper {
         }
         else {
             std::cout << "Accumulator does not have extra bits." << std::endl;
+        }
+
+        if(round_mode()==1) {
+            std::cout << "The rounding mode is round to positive infinity." << std::endl;
+        }
+        else  if(round_mode()==2) {
+           std::cout << "The rounding mode is RTN-TE." << std::endl;
+        }
+        else  if(round_mode()==3) {
+           std::cout << "The rounding mode is round to zero." << std::endl;
+        }
+
+        else  if(round_mode()==4) {
+            std::cout << "The rounding mode is round to minus infinity." << std::endl;
         }
         std::cout << "The size of the FMA is " << fma_size() << std::endl;
         
