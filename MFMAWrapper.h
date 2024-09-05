@@ -1,6 +1,17 @@
 #ifndef MFMA_H
 #define MFMA_H
 
+enum class RoundingMode : uint8_t {
+    roundNotFaithful = 0,
+    roundToNearestEven = 1,
+    roundToNearestZero = 2,
+    roundToNearestAway = 3,
+    roundUp = 4,
+    roundDown = 5,
+    roundToZero = 6,
+    roundUnknown = 7
+};
+
 template <typename InputFormat, typename OutputFormat>
 class MFMAWrapper {
 
@@ -75,49 +86,71 @@ class MFMAWrapper {
             return OutputFormat::isOne(C[0]) ? false : true;
         }
 
-        bool round_mode() {
+        RoundingMode detect_rounding_mode() {
+            // Positive values.
             reset_host_matrices();
-            A[0] = InputFormat::one();
-            A[1] = InputFormat::one();
-            A[2] = InputFormat::one();
-            A[3] = InputFormat::one();
-            B[0] = InputFormat::one();
-            B[1] = InputFormat::half_ulp;
-            B[2] = InputFormat::half_ulp;
-            B[3] = InputFormat::half_ulp;
+            A[0] = InputFormat::minNormal();
+            A[1] = InputFormat::constant(1.0);
+            B[0] = InputFormat::machineEpsilon() * InputFormat::constant(3.0);
+            B[1] = InputFormat::constant(2.0);
             run_mfma_kernel();
-            std::cout << "C[0] = " << C[0] << std::endl;
-            pos_result=C[0];
-            pos_upper=OutputFormat::one()+ OutputFormat::four()*(half_ulp);
-            pos_lower=OutputFormat::one()+ OutputFormat::two()*(half_ulp);
-            return OutputFormat::isOne(C[0]) ? false : true;
+            std::cout.precision(20);
+            auto roundingCandidate = OutputFormat::constant(2.0) + OutputFormat::constant(4.0) * OutputFormat::machineEpsilon();
+            bool positive_rounds_down = (C[0] == OutputFormat::constant(2.0));
+            if (!positive_rounds_down && C[0] != roundingCandidate) // Not rounding to either rounding candidate.
+                return RoundingMode::roundNotFaithful;
 
-            reset_host_matrices();
-            A[0] = InputFormat::minus_one();
-            A[1] = InputFormat::minus_one();
-            A[2] = InputFormat::minus_one();
-            A[3] = InputFormat::minus_one();
-            B[0] = InputFormat::one();
-            B[1] = InputFormat::half_ulp;
-            B[2] = InputFormat::half_ulp;
-            B[3] = InputFormat::half_ulp;
+            // Negative values.
+            C[0] = OutputFormat::constant(0.0);
+            B[0] = -B[0];
+            B[1] = -B[1];
             run_mfma_kernel();
-            neg_result=C[0];
-            neg_toNeg=OutputFormat::minus_one()+ OutputFormat::minus_four()*(OutputFormat::half_ulp);
-            neg_toPos=OutputFormat::minus_one()+ OutputFormat::minus_two()*(OutputFormat::half_ulp);
+            bool negative_rounds_up = (C[0] == -OutputFormat::constant(2.0));
+            if (!negative_rounds_up && C[0] != -roundingCandidate) // Not rounding to either rounding candidate.
+                return RoundingMode::roundNotFaithful;
 
-            if(pos_result==pos_upper && neg_result==neg_toPos)  //round to infinity
-                return 1;
-            if(pos_result==pos_upper && neg_result==neg_toNeg) //RTN-TE
-                return 2;
+            // Determine rounding mode.
+            if (positive_rounds_down && negative_rounds_up) {
+                return RoundingMode::roundToZero;
+            } else if (positive_rounds_down) { // Negative also rounds down.
+                return RoundingMode::roundDown;
+            } else if (negative_rounds_up) {   // Positive also rounds up.
+                return RoundingMode::roundUp;
+            } else { // A round-to-nearest mode – check tie-breaking rule.
+                //Check the tie-breaking rule.
+                C[0] = OutputFormat::constant(0.0);
+                B[0] = InputFormat::machineEpsilon() * InputFormat::constant(2.0);
+                B[1] = InputFormat::constant(2.0);
+                run_mfma_kernel();
+                bool positive_tie_rounds_down = (C[0] == OutputFormat::constant(2.0));
+                if (!positive_tie_rounds_down && C[0] != roundingCandidate) // Not rounding to either rounding candidate.
+                    return RoundingMode::roundNotFaithful;
 
-            if(pos_result==pos_lower && neg_result==neg_toPos)  //round-to-zero
-                return 3;
-            if(pos_result==pos_lower && neg_result==neg_toNeg) //round to minus infinity
-                return 4;
-            
+                C[0] = OutputFormat::constant(0.0);
+                B[0] = -B[0];
+                B[1] = -B[1];
+                run_mfma_kernel();
+                bool negative_tie_rounds_up = (C[0] == -OutputFormat::constant(2.0));
+                if (!positive_tie_rounds_down && C[0] != roundingCandidate) // Not rounding to either rounding candidate.
+                    return RoundingMode::roundNotFaithful;
+
+                if (!positive_tie_rounds_down && !negative_tie_rounds_up)
+                    return RoundingMode::roundToNearestAway;
+
+                C[0] = OutputFormat::constant(0.0);
+                A[1] = InputFormat::minNormal();
+                B[0] = InputFormat::machineEpsilon() * InputFormat::constant(2.0);
+                B[1] = InputFormat::constant(2.0) + InputFormat::machineEpsilon();
+                run_mfma_kernel();
+                bool positive_tie_rounds_to_odd = (C[0] == OutputFormat::constant(2.0) + 
+                        OutputFormat::constant(2.0) * OutputFormat::machineEpsilon());
+
+                if (positive_tie_rounds_to_odd)
+                    return RoundingMode::roundToNearestZero;
+                else
+                    return RoundingMode::roundToNearestEven;
+            }
         }
-
 
         /*
          * Size of the FMA.
@@ -200,19 +233,25 @@ class MFMAWrapper {
         else {
             std::cout << "Accumulator does not have extra bits." << std::endl;
         }
-
-        if(round_mode()==1) {
-            std::cout << "The rounding mode is round to positive infinity." << std::endl;
-        }
-        else  if(round_mode()==2) {
-           std::cout << "The rounding mode is RTN-TE." << std::endl;
-        }
-        else  if(round_mode()==3) {
+        switch (detect_rounding_mode()) {
+            case RoundingMode::roundToNearestEven:
+                std::cout << "The rounding mode is round to nearest even." << std::endl;
+                break;
+            case RoundingMode::roundToNearestZero:
+                std::cout << "The rounding mode is round to nearest zero." << std::endl;
+                break;
+            case RoundingMode::roundToNearestAway:
+                std::cout << "The rounding mode is round to nearest away." << std::endl;
+                break;
+            case RoundingMode::roundUp:
+                std::cout << "The rounding mode is round up." << std::endl;
+                break;
+            case RoundingMode::roundDown:
+                std::cout << "The rounding mode is round down." << std::endl;
+                break;
+            case RoundingMode::roundToZero:
            std::cout << "The rounding mode is round to zero." << std::endl;
-        }
-
-        else  if(round_mode()==4) {
-            std::cout << "The rounding mode is round to minus infinity." << std::endl;
+                break;
         }
         std::cout << "The size of the FMA is " << fma_size() << std::endl;
         
