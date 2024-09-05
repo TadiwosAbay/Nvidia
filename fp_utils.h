@@ -35,10 +35,6 @@ public:
             (x >= -maxNormal() && x <= -minNormal());
     }
 
-    static bool isOne( storage_format x) {
-        return x==one();
-    }
-
     static bool isSubnormal(storage_format x) {
         return x >= -maxSubnormal() && x <= maxSubnormal() && x != convert<binary64_t, storage_format>(0);
     }
@@ -59,15 +55,6 @@ public:
             (ldexp(1.0, arg_exponent + 1 - precision));
     }
 
-    static constexpr storage_format binary_power(int n) {
-        return convert<binary64_t, storage_format>
-            (ldexp(1.0, n));
-    }
-
-    //static constexpr storage_format half_ulp() {
-      //  return convert<binary64_t, storage_format>
-        //    ldexp(1.0, -precision);
-    //}
     static constexpr storage_format beforeOne() {
         return convert<binary64_t, storage_format>
             (ldexp(1.0 - ldexp(1.0, -precision), 1));
@@ -99,45 +86,14 @@ public:
             (ldexp(2.0 - ldexp(1.0, -precision), emax));
     }
 
-    static constexpr storage_format half_ulp() {
-         if constexpr (std::is_same_v<storage_format, __half>) {
-        return __float2half(1.0f) / __float2half(ldexpf(1.0f, precision+13));
-    } else {
-            return static_cast<storage_format>(std::ldexp(1.0, -precision));
-        }
-    }
-
     static constexpr storage_format constant(binary64_t x) {
         return convert<binary64_t, storage_format>(x);
     }
 
-     
     static constexpr storage_format one() {
         return storage_format(1);
     }
 
-     static constexpr storage_format minus_one() {
-        return storage_format(-1);
-    }
-
-    static constexpr storage_format two() {
-        return storage_format(2);
-    }
-
-    static constexpr storage_format four() {
-        return storage_format(4);
-    }
-    static constexpr storage_format minus_two() {
-        return storage_format(-2);
-    }
-
-    static constexpr storage_format minus_four() {
-        return storage_format(-4);
-    }
-
-    static constexpr storage_format signedZero() {
-        return storage_format(-0.0);
-    }
 };
 
 using binary16 = IEEEFloatFormat<binary16_t, 11, 15>;

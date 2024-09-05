@@ -78,12 +78,11 @@ class MFMAWrapper {
          */
         bool has_one_extra_bit() {
             reset_host_matrices();
-            A[0] = InputFormat::one();
-            B[0] = InputFormat::one();
+            A[0] = InputFormat::constant(1.0);
+            B[0] = InputFormat::constant(1.0);
             C[0] = -InputFormat::unitRoundoff();
             run_mfma_kernel();
-            std::cout << "C[0] = " << C[0] << std::endl;
-            return OutputFormat::isOne(C[0]) ? false : true;
+            return (C[0]) == OutputFormat::constant(1.0) ? false : true;
         }
 
         RoundingMode detect_rounding_mode() {
@@ -171,7 +170,7 @@ class MFMAWrapper {
                 A[i] = a_value;
                 B[i] = b_value;
                 run_mfma_kernel();
-                if (OutputFormat::isOne(C[0])) {
+                if (C[0] == OutputFormat::constant(1.0)) {
                     size = i;
                     break;
                 }
@@ -250,7 +249,7 @@ class MFMAWrapper {
                 std::cout << "The rounding mode is round down." << std::endl;
                 break;
             case RoundingMode::roundToZero:
-           std::cout << "The rounding mode is round to zero." << std::endl;
+                std::cout << "The rounding mode is round to zero." << std::endl;
                 break;
         }
         std::cout << "The size of the FMA is " << fma_size() << std::endl;
