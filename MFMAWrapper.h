@@ -51,11 +51,15 @@ class MFMAWrapper {
          * Accuracy of multiplications in dot product.
          */
         bool multiplications_are_exact() {
-            reset_host_matrices();
-            A[0] = InputFormat::belowOne();
-            B[0] = InputFormat::belowOne();
-            run_mfma_kernel();
-            return true;
+            if (InputFormat::precision * 2 > OutputFormat::precision) {
+                return false; // Not enough precision to represent the result.
+            } else {
+                reset_host_matrices();
+                A[0] = InputFormat::beforeOne();
+                B[0] = InputFormat::beforeOne();
+                run_mfma_kernel();
+                return double(C[0]) == double(A[0]) * double(B[0]);
+            }
         }
 
         /*
@@ -125,6 +129,11 @@ class MFMAWrapper {
             std::cout << "Subnormals in accumulator are kept." << std::endl;
         } else {
             std::cout << "Subnormals in accumulator are lost." << std::endl;
+        }
+        if (multiplications_are_exact()) {
+            std::cout << "Multiplications are exact." << std::endl;
+        } else {
+            std::cout << "Multiplications are not exact." << std::endl;
         }
         if(has_one_extra_bit()) {
             std::cout << "Accumulator has one extra bit."<<std::endl;
