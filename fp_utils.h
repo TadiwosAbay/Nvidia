@@ -64,6 +64,10 @@ public:
             (ldexp(1.0, n));
     }
 
+    //static constexpr storage_format half_ulp() {
+      //  return convert<binary64_t, storage_format>
+        //    ldexp(1.0, -precision);
+    //}
     static constexpr storage_format beforeOne() {
         return convert<binary64_t, storage_format>
             (ldexp(1.0 - ldexp(1.0, -precision), 1));
@@ -95,9 +99,9 @@ public:
             (ldexp(2.0 - ldexp(1.0, -precision), emax));
     }
 
-    static constexpr storage_format extra_bit() {
+    static constexpr storage_format half_ulp() {
          if constexpr (std::is_same_v<storage_format, __half>) {
-        return __float2half(1.0f) / __float2half(ldexpf(1.0f, precision));
+        return __float2half(1.0f) / __float2half(ldexpf(1.0f, precision+13));
     } else {
             return static_cast<storage_format>(std::ldexp(1.0, -precision));
         }
