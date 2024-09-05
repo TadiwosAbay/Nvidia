@@ -69,9 +69,10 @@ class MFMAWrapper {
             reset_host_matrices();
             A[0] = InputFormat::one();
             B[0] = InputFormat::one();
-            C[0] = InputFormat::unitRoundoff();
+            C[0] = -InputFormat::unitRoundoff();
             run_mfma_kernel();
-            return OutputFormat::isOne(C[0]) ? true : false;
+            std::cout << "C[0] = " << C[0] << std::endl;
+            return OutputFormat::isOne(C[0]) ? false : true;
         }
 
 
