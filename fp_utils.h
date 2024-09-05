@@ -53,6 +53,17 @@ public:
             (ldexp(1.0, 1 - precision));
     }
 
+    static constexpr storage_format ulp(storage_format x = 1) {
+        auto arg_exponent = ilogb(binary64_t(x));
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, arg_exponent + 1 - precision));
+    }
+
+    static constexpr storage_format binary_power(int n) {
+        return convert<binary64_t, storage_format>
+            (ldexp(1.0, n));
+    }
+
     static constexpr storage_format beforeOne() {
         return convert<binary64_t, storage_format>
             (ldexp(1.0 - ldexp(1.0, -precision), 1));

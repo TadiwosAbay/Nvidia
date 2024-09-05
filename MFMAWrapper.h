@@ -62,13 +62,6 @@ class MFMAWrapper {
             }
         }
 
-        /*
-         * Accuracy of partial products.
-         */
-        bool partial_products_are_exact() {
-            return true;
-        }
-
         /*  ADDED code here
          * Extra bits and rounding modes.
          */
@@ -85,7 +78,29 @@ class MFMAWrapper {
         /*
          * Size of the FMA.
          */
-
+        size_t fma_size() {
+            reset_host_matrices();
+            auto a_value = InputFormat::ulp();
+            auto b_value = InputFormat::constant(OutputFormat::unitRoundoff() / float(InputFormat::ulp()));
+            A[0] = a_value;
+            B[0] = b_value;
+            size_t size = 0;
+            for (size_t i = 1; i < N; i++) {
+                if (i > 1) {
+                    A[i-1] = InputFormat::constant(0);
+                    B[i-1] = InputFormat::constant(0);
+                }
+                C[0] = InputFormat::constant(1);
+                A[i] = a_value;
+                B[i] = b_value;
+                run_mfma_kernel();
+                if (OutputFormat::isOne(C[0])) {
+                    size = i;
+                    break;
+                }
+            }
+            return size;
+        }
 
         /*
          * Accumulation order.
@@ -136,11 +151,12 @@ class MFMAWrapper {
             std::cout << "Multiplications are not exact." << std::endl;
         }
         if(has_one_extra_bit()) {
-            std::cout << "Accumulator has one extra bit."<<std::endl;
+            std::cout << "Accumulator has one extra bit." << std::endl;
         }
         else {
-            std::cout << "Accumulator does not have extra bits." <<std::endl;
+            std::cout << "Accumulator does not have extra bits." << std::endl;
         }
+        std::cout << "The size of the FMA is " << fma_size() << std::endl;
         
     }
 
