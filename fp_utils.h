@@ -116,12 +116,23 @@ public:
         return storage_format(1);
     }
 
+     static constexpr storage_format minus_one() {
+        return storage_format(-1);
+    }
+
     static constexpr storage_format two() {
         return storage_format(2);
     }
 
     static constexpr storage_format four() {
         return storage_format(4);
+    }
+    static constexpr storage_format minus_two() {
+        return storage_format(-2);
+    }
+
+    static constexpr storage_format minus_four() {
+        return storage_format(-4);
     }
 
     static constexpr storage_format signedZero() {
