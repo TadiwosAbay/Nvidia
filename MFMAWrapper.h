@@ -73,8 +73,8 @@ class MFMAWrapper {
             }
         }
 
-        /*  ADDED code here
-         * Extra bits and rounding modes.
+        /*
+         * Extra bits and rounding modes to the right of the accumulator.
          */
         bool has_one_extra_bit() {
             reset_host_matrices();
@@ -150,6 +150,10 @@ class MFMAWrapper {
                     return RoundingMode::roundToNearestEven;
             }
         }
+
+        /*
+         * Extra bits to the right of the accumulator.
+         */
 
         /*
          * Size of the FMA.

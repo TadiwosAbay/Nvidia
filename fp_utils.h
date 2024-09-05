@@ -90,10 +90,6 @@ public:
         return convert<binary64_t, storage_format>(x);
     }
 
-    static constexpr storage_format one() {
-        return storage_format(1);
-    }
-
 };
 
 using binary16 = IEEEFloatFormat<binary16_t, 11, 15>;
