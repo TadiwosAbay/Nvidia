@@ -88,10 +88,16 @@ class MFMAWrapper {
         RoundingMode detect_rounding_mode() {
             // Positive values.
             reset_host_matrices();
-            A[0] = InputFormat::minNormal();
+            A[0] = InputFormat::minNormal();  //shouldn't we  make this one??
             A[1] = InputFormat::constant(1.0);
             B[0] = InputFormat::machineEpsilon() * InputFormat::constant(3.0);
             B[1] = InputFormat::constant(2.0);
+            /////
+            //A[0] = InputFormat::minNormal();  //shouldn't we  make this one??
+            //A[1] = InputFormat::constant(1.0);
+            //B[0] = InputFormat::constant(3.0)*InputFormat::constant(OutputFormat::unitRoundoff() / OutputFormat::constant(InputFormat::minNormal()));
+            //B[1] = InputFormat::constant(2.0);
+            ////////
             run_mfma_kernel();
             std::cout.precision(20);
             auto roundingCandidate = OutputFormat::constant(2.0) + OutputFormat::constant(4.0) * OutputFormat::machineEpsilon();
