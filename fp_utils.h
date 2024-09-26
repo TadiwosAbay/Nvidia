@@ -4,7 +4,6 @@
 
 #include <cmath>
 #include <limits>
-//#include "nvidia_specific_code.h"
 
 using binary32_t = float;
 using binary64_t = double;
