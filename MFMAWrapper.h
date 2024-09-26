@@ -88,19 +88,17 @@ class MFMAWrapper {
         RoundingMode detect_rounding_mode() {
             // Positive values.
             reset_host_matrices();
-            A[0] = InputFormat::minNormal();  //shouldn't we  make this one??
+/*          A[0] = InputFormat::minNormal();
             A[1] = InputFormat::constant(1.0);
             B[0] = InputFormat::machineEpsilon() * InputFormat::constant(3.0);
+            B[1] = InputFormat::constant(2.0); */
+            A[0] = InputFormat::minNormal();
+            A[1] = InputFormat::constant(1.0);
+            B[0] = InputFormat::constant(3.0)*InputFormat::constant(OutputFormat::unitRoundoff() / OutputFormat::constant(InputFormat::minNormal()));
             B[1] = InputFormat::constant(2.0);
-            /////
-            //A[0] = InputFormat::minNormal();  //shouldn't we  make this one??
-            //A[1] = InputFormat::constant(1.0);
-            //B[0] = InputFormat::constant(3.0)*InputFormat::constant(OutputFormat::unitRoundoff() / OutputFormat::constant(InputFormat::minNormal()));
-            //B[1] = InputFormat::constant(2.0);
-            ////////
             run_mfma_kernel();
             std::cout.precision(20);
-            auto roundingCandidate = OutputFormat::constant(2.0) + OutputFormat::constant(4.0) * OutputFormat::machineEpsilon();
+            auto roundingCandidate = OutputFormat::constant(2.0) + OutputFormat::constant(4.0) * OutputFormat::unitRoundoff();
             bool positive_rounds_down = (C[0] == OutputFormat::constant(2.0));
             if (!positive_rounds_down && C[0] != roundingCandidate) // Not rounding to either rounding candidate.
                 return RoundingMode::roundNotFaithful;
@@ -123,6 +121,8 @@ class MFMAWrapper {
                 return RoundingMode::roundUp;
             } else { // A round-to-nearest mode – check tie-breaking rule.
                 //Check the tie-breaking rule.
+                // FIX: we shouldn't be using the input format in B, but the output format.
+                // This will only work for binary16 -> barinary32.
                 C[0] = OutputFormat::constant(0.0);
                 B[0] = InputFormat::machineEpsilon() * InputFormat::constant(2.0);
                 B[1] = InputFormat::constant(2.0);
