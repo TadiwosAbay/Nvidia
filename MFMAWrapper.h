@@ -80,7 +80,7 @@ class MFMAWrapper {
             reset_host_matrices();
             A[0] = InputFormat::constant(1.0);
             B[0] = InputFormat::constant(1.0);
-            C[0] = -InputFormat::unitRoundoff();
+            C[0] = -OutputFormat::unitRoundoff();
             run_mfma_kernel();
             return (C[0]) == OutputFormat::constant(1.0) ? false : true;
         }
