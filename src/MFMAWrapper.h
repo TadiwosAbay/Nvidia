@@ -1,16 +1,7 @@
 #ifndef MFMA_H
 #define MFMA_H
 
-enum class RoundingMode : uint8_t {
-    roundNotFaithful = 0,
-    roundToNearestEven = 1,
-    roundToNearestZero = 2,
-    roundToNearestAway = 3,
-    roundUp = 4,
-    roundDown = 5,
-    roundToZero = 6,
-    roundUnknown = 7
-};
+#include "Features.h"
 
 template <typename InputFormat, typename OutputFormat>
 class MFMAWrapper {
@@ -191,6 +182,16 @@ class MFMAWrapper {
         /*
          * Accumulation order.
          */
+        bool sum_starts_from_largest() {
+/*             reset_host_matrices();
+            A[0] = InputFormat::constant(1.0);
+            B[0] = InputFormat::constant(1.0);
+            A[1] = InputFormat::constant(1.0);
+            B[1] = InputFormat::constant(1.0);
+            run_mfma_kernel();
+            return C[0] == OutputFormat::constant(2.0); */
+            return false;
+        }
 
     public:
         std::vector<input_t> A, B;
@@ -210,62 +211,12 @@ class MFMAWrapper {
         C.assign(C.size(), 0);
     };
 
-    void run_test() {
-        if (produces_subnormals_from_subnormals()) {
-            std::cout << "Produces subnormals from subnormals." << std::endl;
-        } else {
-            std::cout << "Does not produce subnormals from subnormals." << std::endl;
-        }
-        if (produces_normals_from_subnormals()) {
-            std::cout << "Produces normals from subnormals." << std::endl;
-        } else {
-            std::cout << "Does not produce normals from subnormals." << std::endl;
-        }
-        if (produces_subnormals_from_normals()) {
-            std::cout << "Produces subnormals from normals." << std::endl;
-        } else {
-            std::cout << "Does not produce subnormals from normals." << std::endl;
-        }
-        if (keeps_subnormals_in_accumulator()) {
-            std::cout << "Subnormals in accumulator are kept." << std::endl;
-        } else {
-            std::cout << "Subnormals in accumulator are lost." << std::endl;
-        }
-        if (multiplications_are_exact()) {
-            std::cout << "Multiplications are exact." << std::endl;
-        } else {
-            std::cout << "Multiplications are not exact." << std::endl;
-        }
-        if(has_one_extra_bit()) {
-            std::cout << "Accumulator has one extra bit." << std::endl;
-        }
-        else {
-            std::cout << "Accumulator does not have extra bits." << std::endl;
-        }
-        switch (detect_rounding_mode()) {
-            case RoundingMode::roundToNearestEven:
-                std::cout << "The rounding mode is round to nearest even." << std::endl;
-                break;
-            case RoundingMode::roundToNearestZero:
-                std::cout << "The rounding mode is round to nearest zero." << std::endl;
-                break;
-            case RoundingMode::roundToNearestAway:
-                std::cout << "The rounding mode is round to nearest away." << std::endl;
-                break;
-            case RoundingMode::roundUp:
-                std::cout << "The rounding mode is round up." << std::endl;
-                break;
-            case RoundingMode::roundDown:
-                std::cout << "The rounding mode is round down." << std::endl;
-                break;
-            case RoundingMode::roundToZero:
-                std::cout << "The rounding mode is round to zero." << std::endl;
-                break;
-        }
-        std::cout << "The size of the FMA is " << fma_size() << std::endl;
-        
+    void run_tests() {
+        Features features (produces_subnormals_from_subnormals(), produces_subnormals_from_normals(),
+                      produces_normals_from_subnormals(), keeps_subnormals_in_accumulator(),
+                      multiplications_are_exact(), has_one_extra_bit(), detect_rounding_mode(), fma_size());
+        features.print_report();
     }
-
 };
 
 #endif // MFMA_H

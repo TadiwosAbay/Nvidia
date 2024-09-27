@@ -6,7 +6,7 @@
 #include "MFMAWrapper.h"
 #include "nvidia_specific_code.h"
 #include "fp_utils.h"
-#include "test.cu"
+#include "test.cpp"
 
 int main(){
 
@@ -17,7 +17,7 @@ int main(){
     constexpr size_t M = 16, N = 16, K = 16;
     auto mw = MFMAWrapper<binary16,binary32>(M, N, K);
     run_tests<binary16, binary32>();
-    mw.run_test();
+    mw.run_tests();
 
     return 0;
 }

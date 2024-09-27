@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(CUDA REQUIRED)
 
 # Add executable
-add_executable(nvidia_test main.cu)
+add_executable(nvidia_test src/main.cu)
 set_property(TARGET nvidia_test PROPERTY CUDA_ARCHITECTURES native)
 
 # Link with CUDA runtime library
