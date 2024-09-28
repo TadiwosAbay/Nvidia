@@ -4,16 +4,13 @@
 #include "Features.h"
 
 template <typename InputFormat, typename OutputFormat>
-class MFMAWrapper {
+class HardwareUnit {
 
-    private:
+    public:
         size_t M, N, K, A_size, B_size, C_size;
 
         using input_t = typename InputFormat::storageFormat;
         using output_t = typename OutputFormat::storageFormat;
-
-        input_t *A_d, *B_d;
-        output_t *C_d;
 
         /*
          * Support for subnormals.
@@ -197,12 +194,13 @@ class MFMAWrapper {
         std::vector<input_t> A, B;
         std::vector<output_t> C;
 
-    MFMAWrapper(size_t M, size_t N, size_t K);
-
-    ~MFMAWrapper();
+    HardwareUnit(size_t M, size_t N, size_t K) :
+                 M(M), N(N), K(K),
+                 A_size(M * K), B_size(K * N), C_size(M * N),
+                 A(A_size), B(B_size), C(C_size) {};
 
     /* Run MFMA kernel on device. */
-    void run_mfma_kernel();
+    void virtual run_mfma_kernel() = 0;
 
     /* Set the entries of host arrays to zero. */
     void reset_host_matrices() {

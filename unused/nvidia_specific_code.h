@@ -176,7 +176,7 @@ __global__ void wmma_ker(binary64_t *A, binary64_t *B, output_t *C, bool init) {
 
 
 template <typename input_t, typename output_t>
-MFMAWrapper<input_t, output_t>::MFMAWrapper(size_t M, size_t N, size_t K) :
+HardwareUnit<input_t, output_t>::HardwareUnit(size_t M, size_t N, size_t K) :
                          M(M), N(N), K(K),
                          A_size(M * K), B_size(K * N), C_size(M * N),
                          A(A_size), B(B_size), C(C_size) {
@@ -186,14 +186,14 @@ MFMAWrapper<input_t, output_t>::MFMAWrapper(size_t M, size_t N, size_t K) :
 }
 
 template <typename input_t, typename output_t>
-MFMAWrapper<input_t, output_t>::~MFMAWrapper() {
+HardwareUnit<input_t, output_t>::~HardwareUnit() {
     cudaFree(C_d);
     cudaFree(B_d);
     cudaFree(A_d);
 }
 
 template <typename input_t, typename output_t>
-void MFMAWrapper<input_t, output_t>::run_mfma_kernel() {
+void HardwareUnit<input_t, output_t>::run_mfma_kernel() {
 
     // Copy input from host to device.
     cudaMemcpy(A_d, A.data(), A_size * sizeof(input_t), cudaMemcpyHostToDevice);
