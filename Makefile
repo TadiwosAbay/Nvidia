@@ -1,11 +1,20 @@
 CXX=nvcc
-CXXFLAGS=-arch=sm_80 -std=c++20
+CXXFLAGS=-arch=native -std=c++20
 
 all: nvidia_test
 
-nvidia_test: src/main.cu
+testing_suite: src/main.cu src/*
 	$(CXX) -o $@ $(CXXFLAGS) $<
+
+run: testing_suite
+	./$<
+
+nvidia_test: test/runtests.cpp test/* src/*
+	$(CXX) -o $@ $(CXXFLAGS) -I src/ $<
+
+test: nvidia_test
+	./$<
 
 .PHONY: clean
 clean:
-	rm -f nvidia_test
+	rm -f testing_suite nvidia_test
