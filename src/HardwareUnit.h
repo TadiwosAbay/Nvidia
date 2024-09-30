@@ -1,6 +1,7 @@
 #ifndef HARDWARE_UNIT_H
 #define HARDWARE_UNIT_H
 
+#include <vector>
 #include "Features.h"
 
 template <typename InputFormat, typename OutputFormat>
@@ -173,7 +174,7 @@ class HardwareUnit {
                     break;
                 }
             }
-            return size;
+            return size == 0 ? K : size;
         }
 
         /*
@@ -209,11 +210,12 @@ class HardwareUnit {
             C.assign(C.size(), 0);
         }
 
-        void run_tests() {
+        Features run_tests() {
             Features features (produces_subnormals_from_subnormals(), produces_subnormals_from_normals(),
                         produces_normals_from_subnormals(), keeps_subnormals_in_accumulator(),
                         multiplications_are_exact(), has_one_extra_bit(), detect_rounding_mode(), fma_size());
             features.print_report();
+            return features;
         }
 };
 

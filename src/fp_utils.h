@@ -5,9 +5,6 @@
 #include <cmath>
 #include <limits>
 
-using binary32_t = float;
-using binary64_t = double;
-
 template <typename input_t, typename output_t>
 output_t convert(input_t x) {
     return static_cast<output_t>(x);
@@ -18,6 +15,7 @@ constexpr T constexpr_ldexp(T x) {
     return x * (1 << Exponent);
 }
 
+using extended_float_t = double;
 /*
  * All constants are computed in binary64 arithetmic and converted to the
  * target precision by the `convert` function.
@@ -35,64 +33,65 @@ public:
     }
 
     static bool isSubnormal(storage_format x) {
-        return x >= -maxSubnormal() && x <= maxSubnormal() && x != convert<binary64_t, storage_format>(0);
+        return x >= -maxSubnormal() && x <= maxSubnormal() && x != convert<extended_float_t, storage_format>(0);
     }
 
     static constexpr storage_format unitRoundoff() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0, -precision));
     }
 
     static constexpr storage_format machineEpsilon() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0, 1 - precision));
     }
 
     static constexpr storage_format ulp(storage_format x = 1) {
-        auto arg_exponent = ilogb(binary64_t(x));
-        return convert<binary64_t, storage_format>
+        auto arg_exponent = ilogb(extended_float_t(x));
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0, arg_exponent + 1 - precision));
     }
 
     static constexpr storage_format beforeOne() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0 - ldexp(1.0, -precision), 1));
     }
 
     static constexpr storage_format minSubnormal() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0, 2 - emax - precision));
     }
 
     // This is MinNormal() / 2.
     static constexpr storage_format midwaySubnormal() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0, -emax));
     }
 
     static constexpr storage_format maxSubnormal() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0 - ldexp(1.0, 1 - precision), 1 - emax));
     }
 
     static constexpr storage_format minNormal() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(1.0, 1 - emax));
     }
 
     static constexpr storage_format maxNormal() {
-        return convert<binary64_t, storage_format>
+        return convert<extended_float_t, storage_format>
             (ldexp(2.0 - ldexp(1.0, -precision), emax));
     }
 
-    static constexpr storage_format constant(binary64_t x) {
-        return convert<binary64_t, storage_format>(x);
+    static constexpr storage_format constant(extended_float_t x) {
+        return convert<extended_float_t, storage_format>(x);
     }
 
 };
 
-using binary16 = IEEEFloatFormat<binary16_t, 11, 15>;
-using bfloat16 = IEEEFloatFormat<binary16_t, 8, 127>;
+using binary32_t = float;
+using binary64_t = double;
+
 using binary32 = IEEEFloatFormat<binary32_t, 24, 127>;
 using binary64 = IEEEFloatFormat<binary64_t, 53, 1023>;
 

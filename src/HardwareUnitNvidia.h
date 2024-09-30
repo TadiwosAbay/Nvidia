@@ -13,6 +13,8 @@ using namespace nvcuda;
 
 using binary16_t = half;
 using bfloat16_t = nv_bfloat16;
+using binary16 = IEEEFloatFormat<binary16_t, 11, 15>;
+using bfloat16 = IEEEFloatFormat<bfloat16_t, 8, 127>;
 
 #include "fp_utils.h"
 
