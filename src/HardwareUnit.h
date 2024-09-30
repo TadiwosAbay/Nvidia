@@ -1,5 +1,5 @@
-#ifndef MFMA_H
-#define MFMA_H
+#ifndef HARDWARE_UNIT_H
+#define HARDWARE_UNIT_H
 
 #include "Features.h"
 
@@ -217,4 +217,4 @@ class HardwareUnit {
     }
 };
 
-#endif // MFMA_H
+#endif // HARDWARE_UNIT_H

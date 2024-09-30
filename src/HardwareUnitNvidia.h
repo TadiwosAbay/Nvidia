@@ -1,5 +1,5 @@
-#ifndef NVIDIA_SPECIFIC_CODE_H
-#define NVIDIA_SPECIFIC_CODE_H
+#ifndef HARDWARE_UNIT_NVIDIA_H
+#define HARDWARE_UNIT_NVIDIA_H
 
 #include <mma.h>
 #include <cuda_runtime.h>
@@ -98,4 +98,4 @@ void run_mfma_kernel() {
 }
 };
 
-#endif // NVIDIA_SPECIFIC_CODE_H
+#endif // HARDWARE_UNIT_NVIDIA_H
