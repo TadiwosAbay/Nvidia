@@ -69,33 +69,33 @@ class HardwareUnitNvidia : public HardwareUnit<InputFormat, OutputFormat> {
     input_t *A_d, *B_d;
     output_t *C_d;
 
-public:
-HardwareUnitNvidia(size_t M, size_t N, size_t K) :
-    HardwareUnit<InputFormat, OutputFormat>(M, N, K) {
-    cudaMalloc(&A_d, M * K * sizeof(input_t));
-    cudaMalloc(&B_d, K * N * sizeof(input_t));
-    cudaMalloc(&C_d, M * N * sizeof(output_t));
-}
+    public:
+        HardwareUnitNvidia(size_t M, size_t N, size_t K) :
+            HardwareUnit<InputFormat, OutputFormat>(M, N, K) {
+            cudaMalloc(&A_d, M * K * sizeof(input_t));
+            cudaMalloc(&B_d, K * N * sizeof(input_t));
+            cudaMalloc(&C_d, M * N * sizeof(output_t));
+        }
 
-~HardwareUnitNvidia() {
-    cudaFree(C_d);
-    cudaFree(B_d);
-    cudaFree(A_d);
-}
+        ~HardwareUnitNvidia() {
+            cudaFree(C_d);
+            cudaFree(B_d);
+            cudaFree(A_d);
+        }
 
-private:
-void run_mfma_kernel() {
+    private:
+        void run_mfma_kernel() {
 
-    // Copy input from host to device.
-    cudaMemcpy(A_d, this->A.data(), this->A_size * sizeof(input_t), cudaMemcpyHostToDevice);
-    cudaMemcpy(B_d, this->B.data(), this->B_size * sizeof(input_t), cudaMemcpyHostToDevice);
-    cudaMemcpy(C_d, this->C.data(), this->C_size * sizeof(output_t), cudaMemcpyHostToDevice);
+            // Copy input from host to device.
+            cudaMemcpy(A_d, this->A.data(), this->A_size * sizeof(input_t), cudaMemcpyHostToDevice);
+            cudaMemcpy(B_d, this->B.data(), this->B_size * sizeof(input_t), cudaMemcpyHostToDevice);
+            cudaMemcpy(C_d, this->C.data(), this->C_size * sizeof(output_t), cudaMemcpyHostToDevice);
 
-    wmma_ker<<<1,32>>>(A_d, B_d, C_d);
+            wmma_ker<<<1,32>>>(A_d, B_d, C_d);
 
-    // Copy result from device to host.
-    cudaMemcpy(this->C.data(), C_d, this->C_size * sizeof(output_t), cudaMemcpyDeviceToHost);
-}
+            // Copy result from device to host.
+            cudaMemcpy(this->C.data(), C_d, this->C_size * sizeof(output_t), cudaMemcpyDeviceToHost);
+        }
 };
 
 #endif // HARDWARE_UNIT_NVIDIA_H

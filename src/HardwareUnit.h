@@ -194,27 +194,27 @@ class HardwareUnit {
         std::vector<input_t> A, B;
         std::vector<output_t> C;
 
-    HardwareUnit(size_t M, size_t N, size_t K) :
-                 M(M), N(N), K(K),
-                 A_size(M * K), B_size(K * N), C_size(M * N),
-                 A(A_size), B(B_size), C(C_size) {};
+        HardwareUnit(size_t M, size_t N, size_t K) :
+                    M(M), N(N), K(K),
+                    A_size(M * K), B_size(K * N), C_size(M * N),
+                    A(A_size), B(B_size), C(C_size) {};
 
-    /* Run MFMA kernel on device. */
-    void virtual run_mfma_kernel() = 0;
+        /* Run MFMA kernel on device. */
+        void virtual run_mfma_kernel() = 0;
 
-    /* Set the entries of host arrays to zero. */
-    void reset_host_matrices() {
-        A.assign(A.size(), 0);
-        B.assign(B.size(), 0);
-        C.assign(C.size(), 0);
-    };
+        /* Set the entries of host arrays to zero. */
+        void reset_host_matrices() {
+            A.assign(A.size(), 0);
+            B.assign(B.size(), 0);
+            C.assign(C.size(), 0);
+        }
 
-    void run_tests() {
-        Features features (produces_subnormals_from_subnormals(), produces_subnormals_from_normals(),
-                      produces_normals_from_subnormals(), keeps_subnormals_in_accumulator(),
-                      multiplications_are_exact(), has_one_extra_bit(), detect_rounding_mode(), fma_size());
-        features.print_report();
-    }
+        void run_tests() {
+            Features features (produces_subnormals_from_subnormals(), produces_subnormals_from_normals(),
+                        produces_normals_from_subnormals(), keeps_subnormals_in_accumulator(),
+                        multiplications_are_exact(), has_one_extra_bit(), detect_rounding_mode(), fma_size());
+            features.print_report();
+        }
 };
 
 #endif // HARDWARE_UNIT_H
