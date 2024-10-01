@@ -5,6 +5,10 @@
 #include "Features.h"
 #include "HardwareUnit.h"
 
+extern "C" {
+    #include "cpfloat.h"
+}
+
 template <typename InputFormat, typename OutputFormat>
 class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
 
@@ -13,19 +17,29 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
     using internal_t = double;
 
     std::vector<double> partial_products;
+
+    optstruct *fpopts_input_t, *fpopts_output_t;
+
     Features features;
 
     public:
         HardwareUnitSimulator(size_t M, size_t N, size_t K, Features features) :
-            HardwareUnit<InputFormat, OutputFormat>(M, N, K), features(features) {
-                partial_products.resize(K);
+                              HardwareUnit<InputFormat, OutputFormat>(M, N, K),
+                              features(features) {
+            partial_products.resize(K);
+            fpopts_input_t = init_optstruct();
+            fpopts_output_t = init_optstruct();
         }
 
         ~HardwareUnitSimulator() {
+            free_optstruct(fpopts_input_t);
+            free_optstruct(fpopts_output_t);
         }
 
     private:
         void run_mfma_kernel() {
+            // Round to input format using round to nearest even.
+
             for (size_t i = 0; i < this->M; i++) {
                 for (size_t j = 0; j < this->N; j++) {
                     // Compute partial products.

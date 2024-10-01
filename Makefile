@@ -9,8 +9,12 @@ testing_suite: src/main.cu src/*
 run: testing_suite
 	./$<
 
-nvidia_test: test/runtests.cpp test/* src/*
-	$(CXX) -o $@ $(CXXFLAGS) -I src/ $<
+.PHONY: deps
+deps:
+	cd deps/cpfloat && make lib
+
+nvidia_test: test/runtests.cpp test/* src/* deps/cpfloat/build/include/cpfloat.h deps/cpfloat/build/lib/libcpfloat.so
+	$(CXX) -o $@ $(CXXFLAGS) -I src/ -I deps/cpfloat/build/include/ -L deps/cpfloat/build/lib/ $< -lcpfloat
 
 test: nvidia_test
 	./$<

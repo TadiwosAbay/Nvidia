@@ -1,0 +1,3 @@
+[submodule "deps/cpfloat"]
+	path = deps/cpfloat
+	url = git@github.com:north-numerical-computing/cpfloat.git
