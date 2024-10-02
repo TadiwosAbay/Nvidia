@@ -149,7 +149,42 @@ class HardwareUnit {
         /*
          * Extra bits to the right of the accumulator.
          */
+        //###################################################################################################################################################################
+       bool has_extra_bits_to_the_right() {
+            // Reset the matrices to start with clean values
+            reset_host_matrices();
 
+            // Set A[0] = 1.0
+            A[0] = InputFormat::constant(1.0);
+
+            // Set A[1] through A[4] to 1/4 ULP
+            for (int i = 1; i <= 4; ++i) {
+                A[i] = OutputFormat::ulp() / OutputFormat::constant(4.0);
+            }
+
+            // Set B[0] through B[4] to 1.0
+            for (int i = 0; i <= 4; ++i) {
+                B[i] = InputFormat::constant(1.0);
+            }
+
+            // Run the matrix multiplication kernel
+            run_mfma_kernel();
+
+            // Check the value in C[0] to see if the accumulator has extra precision.
+            // If extra precision exists, the result should be slightly more than 1.0
+            auto expected_result = OutputFormat::constant(1.0) + OutputFormat::ulp();
+            bool has_extra_precision = (C[0] == expected_result);
+
+            // Return the result
+            return has_extra_precision;
+        }
+
+
+
+
+
+
+        //###################################################################################################################################################################
         /*
          * Size of the FMA.
          */
