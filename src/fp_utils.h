@@ -22,10 +22,25 @@ using extended_float_t = double;
  */
 template <typename storage_format, size_t Precision, size_t Emax>
 class IEEEFloatFormat {
-public:
+private:
     static constexpr int precision = Precision;
     static constexpr int emax = Emax;
+
+public:
+
     using storageFormat = storage_format;
+
+    static size_t getPrecision() {
+        return precision;
+    }
+
+    static int getEmax() {
+        return emax;
+    }
+
+    static int getEmin() {
+        return 1 - emax;
+    }
 
     static bool isNormal(storage_format x) {
         return (x >= minNormal() && x <= maxNormal()) ||

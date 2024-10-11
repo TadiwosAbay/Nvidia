@@ -51,7 +51,7 @@ class HardwareUnit {
          * Accuracy of multiplications in dot product.
          */
         bool multiplications_are_exact() {
-            if (InputFormat::precision * 2 > OutputFormat::precision) {
+            if (InputFormat::getPrecision() * 2 > OutputFormat::getPrecision()) {
                 return false; // Not enough precision to represent the result.
             } else {
                 reset_host_matrices();
@@ -270,7 +270,6 @@ class HardwareUnit {
             Features features (produces_subnormals_from_subnormals(), produces_subnormals_from_normals(),
                         produces_normals_from_subnormals(), keeps_subnormals_in_accumulator(),
                         multiplications_are_exact(), has_one_extra_bit(), detect_rounding_mode(), fma_size());
-            features.print_report();
             return features;
         }
 };

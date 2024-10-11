@@ -16,7 +16,8 @@ int main(){
     constexpr size_t M = 16, N = 16, K = 16;
     auto mw = HardwareUnitNvidia<binary16,binary32>(M, N, K);
     /* run_tests<binary16, binary32>(); */
-    mw.run_tests();
+    auto features = mw.run_tests();
+    features.print_report();
 
     return 0;
 }
