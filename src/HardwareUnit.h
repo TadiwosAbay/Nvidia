@@ -180,6 +180,27 @@ class HardwareUnit {
         }
 
 
+        bool Extra_bits_with_two_nums() {
+                reset_host_matrices();
+    
+            // Set A[0] * B[0] to -(1 + 2 * ulp)
+            A[0] = -InputFormat::constant(1.0) - InputFormat::ulp() ;//* InputFormat::constant(2.0);
+            B[0] = InputFormat::constant(1.0);
+    
+            // Set A[1] * B[1] to 1 + 2^2
+            A[1] = InputFormat::constant(1.0);
+            B[1] = InputFormat::constant(1.0) + InputFormat::constant(4.0);
+    
+
+                run_mfma_kernel();
+    
+            // Evaluate the result
+            auto expected_output = -(0.5 + 2 * OutputFormat::ulp()) + (1.0 + 4.0);
+            bool result = (C[0] == expected_output);
+
+            return result;
+        }
+
 
 
 
