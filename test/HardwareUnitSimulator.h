@@ -39,7 +39,7 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
             fpopts_output_t = init_optstruct();
 
             // Initialize CPFloat formats.
-            fpopts_input_t->p = InputFormat::getPrecision();
+            fpopts_input_t->precision = InputFormat::getPrecision();
             fpopts_input_t->emin = InputFormat::getEmin();
             fpopts_input_t->emax = InputFormat::getEmax();
             fpopts_input_t->explim = CPFLOAT_EXPRANGE_STOR;
@@ -50,11 +50,10 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
                 fpopts_input_t->subnormal = CPFLOAT_SUBN_USE;
             else
                 fpopts_input_t->subnormal = CPFLOAT_SUBN_RND; // I should implement FTZ!
-            fpopts_input_t->subnormal = CPFLOAT_SUBN_USE;
             fpopts_input_t->flip = CPFLOAT_SOFTERR_NO;
 
             // Initialize CPFloat formats.
-            fpopts_accumulator_t->p = OutputFormat::getPrecision();
+            fpopts_accumulator_t->precision = OutputFormat::getPrecision();
             fpopts_accumulator_t->emin = OutputFormat::getEmin();
             fpopts_accumulator_t->emax = OutputFormat::getEmax();
             fpopts_accumulator_t->explim = CPFLOAT_EXPRANGE_STOR;
@@ -65,7 +64,7 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
             fpopts_accumulator_t->flip = CPFLOAT_SOFTERR_NO;
 
             // Initialize CPFloat formats.
-            fpopts_output_t->p = OutputFormat::getPrecision();
+            fpopts_output_t->precision = OutputFormat::getPrecision();
             fpopts_output_t->emin = OutputFormat::getEmin();
             fpopts_output_t->emax = OutputFormat::getEmax();
             fpopts_output_t->explim = CPFLOAT_EXPRANGE_STOR;
@@ -115,9 +114,9 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
                 Cd[i] = this->C[i];
 
             // Round to input format using round to nearest even.
-            cpf_round(this->Ad.data(), this->Ad.data(), this->A_size, fpopts_input_t);
-            cpf_round(this->Bd.data(), this->Bd.data(), this->B_size, fpopts_input_t);
-            cpf_round(this->Cd.data(), this->Cd.data(), this->C_size, fpopts_input_t);
+            cpfloat(this->Ad.data(), this->Ad.data(), this->A_size, fpopts_input_t);
+            cpfloat(this->Bd.data(), this->Bd.data(), this->B_size, fpopts_input_t);
+            cpfloat(this->Cd.data(), this->Cd.data(), this->C_size, fpopts_input_t);
 
             int accumulator_precision = OutputFormat::getPrecision() + num_extra_bits;
 
@@ -142,7 +141,7 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
                         for (size_t k = 0; k < number_of_elements; k++) {
                             int curr_exp = std::ilogb(partial_products[k]);
                             fpopts_accumulator_t->precision = accumulator_precision - (max_exp - curr_exp);
-                            cpf_round(&partial_products[k], &partial_products[k], 1, fpopts_accumulator_t);
+                            cpfloat(&partial_products[k], &partial_products[k], 1, fpopts_accumulator_t);
                         }
 
                         // Accumulate partial products.
@@ -151,11 +150,11 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
                             accumulator += partial_products[k];
 
                         // Round to output format.
-                        cpf_round(&accumulator, &accumulator, 1, fpopts_output_t);
+                        cpfloat(&accumulator, &accumulator, 1, fpopts_output_t);
 
                         // Keep accumulation.
                         this->Cd[i * this->N + j] += accumulator;
-                        cpf_round(&Cd[i * this->N + j], &Cd[i * this->N + j], 1, fpopts_output_t);
+                        cpfloat(&Cd[i * this->N + j], &Cd[i * this->N + j], 1, fpopts_output_t);
                     }
                 }
             }
