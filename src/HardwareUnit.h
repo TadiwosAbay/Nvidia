@@ -331,7 +331,7 @@ class HardwareUnit {
         Features run_tests() {
             Features features (produces_subnormals_from_subnormals(), produces_subnormals_from_normals(),
                         produces_normals_from_subnormals(), keeps_subnormals_in_accumulator(),
-                        multiplications_are_exact(), has_one_extra_bit(), detect_rounding_mode(), fma_size());
+                        multiplications_are_exact(), has_one_extra_bit(), check_extra_bits_with_three_bits(),detect_rounding_mode(), fma_size());
             return features;
         }
 };
