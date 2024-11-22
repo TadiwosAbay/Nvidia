@@ -57,6 +57,7 @@ class Features {
             subnormals_in_accumulator(subnormals_in_accumulator),
             multiplicationsAreExact(multiplicationsAreExact),
             extra_bit(extra_bit),
+            extra_bits_three_bit(extra_bits_three_bit),
             rounding_mode(rounding_mode),
             FmaSize(FmaSize) {};
 
@@ -121,6 +122,7 @@ class Features {
                    (lhs.subnormals_in_accumulator == rhs.subnormals_in_accumulator) &&
                    (lhs.multiplicationsAreExact == rhs.multiplicationsAreExact) &&
                    (lhs.extra_bit == rhs.extra_bit) &&
+                   (lhs.extra_bits_three_bit == rhs.extra_bits_three_bit) &&
                    (lhs.rounding_mode == rhs.rounding_mode) &&
                    (lhs.FmaSize == rhs.FmaSize);
         }
