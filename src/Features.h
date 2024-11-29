@@ -49,9 +49,13 @@ class Features {
             return FmaSize;
         }
 
+        bool hasExtraBitsThreeBit() const {
+            return extra_bits_three_bit;
+        }
+
         Features(bool subnormalsFromSubnormals, bool subnormalsFromNormals, bool normalsFromSubnormals,
                bool subnormals_in_accumulator, bool multiplicationsAreExact,
-               bool extra_bit, RoundingMode rounding_mode, size_t FmaSize) : 
+               bool extra_bit, bool extra_bits_three_bit, RoundingMode rounding_mode, size_t FmaSize) : 
             subnormalsFromSubnormals(subnormalsFromSubnormals),
             subnormalsFromNormals(subnormalsFromNormals),
             normalsFromSubnormals(normalsFromSubnormals),
