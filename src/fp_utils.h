@@ -110,4 +110,8 @@ using binary64_t = double;
 using binary32 = IEEEFloatFormat<binary32_t, 24, 127>;
 using binary64 = IEEEFloatFormat<binary64_t, 53, 1023>;
 
+template <typename T> std::string get_type_name() {return "unknown storageFormat";}
+template <> std::string get_type_name<binary32_t>() {return "binary32 (single)";}
+template <> std::string get_type_name<binary64_t>() {return "binary64 (double)";}
+
 #endif // FP_UTILS_H

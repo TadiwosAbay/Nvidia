@@ -1,8 +1,7 @@
-template <typename T> std::string get_type_name() {return "unknown storageFormat";}
-template <> std::string get_type_name<bfloat16_t>() {return "bfloat16";}
-template <> std::string get_type_name<binary16_t>() {return "binary16 (half)";}
-template <> std::string get_type_name<binary32_t>() {return "binary32 (single)";}
-template <> std::string get_type_name<binary64_t>() {return "binary64 (double)";}
+#include <iostream>
+#include <string>
+
+#include "fp_utils.h"
 
 template <typename InputFormat, typename OutputFormat>
 void run_tests(){

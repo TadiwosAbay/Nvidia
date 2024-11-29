@@ -16,6 +16,9 @@ using bfloat16_t = nv_bfloat16;
 using binary16 = IEEEFloatFormat<binary16_t, 11, 15>;
 using bfloat16 = IEEEFloatFormat<bfloat16_t, 8, 127>;
 
+template <> std::string get_type_name<bfloat16_t>() {return "bfloat16";}
+template <> std::string get_type_name<binary16_t>() {return "binary16 (half)";}
+
 #include "fp_utils.h"
 
 // Overload << operator for half type (binary16_t)
