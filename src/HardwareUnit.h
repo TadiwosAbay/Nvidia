@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Features.h"
+#include "fp_utils.h"
 
 template <typename InputFormat, typename OutputFormat>
 class HardwareUnit {
