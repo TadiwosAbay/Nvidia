@@ -23,6 +23,7 @@ class Features {
         bool subnormals_in_accumulator;
         bool multiplicationsAreExact;
         bool extra_bit;
+        bool extra_bits_three_bit;
         RoundingMode rounding_mode;
         size_t FmaSize;
 
