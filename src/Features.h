@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
+#include <string>
 
 enum class RoundingMode : uint8_t {
     roundNotFaithful = 0,
@@ -98,14 +99,17 @@ class Features {
                 std::cout << "Accumulator does not have extra bits." << std::endl;
             }
             switch (rounding_mode) {
+                case RoundingMode::roundNotFaithful:
+                    std::cout << "Rounding is not faithful." << std::endl;
+                    break;
                 case RoundingMode::roundToNearestEven:
-                    std::cout << "The rounding mode is round to nearest even." << std::endl;
+                    std::cout << "The rounding mode is round-to-nearest ties-to-even." << std::endl;
                     break;
                 case RoundingMode::roundToNearestZero:
-                    std::cout << "The rounding mode is round to nearest zero." << std::endl;
+                    std::cout << "The rounding mode is round-to-nearest ties-to-zero." << std::endl;
                     break;
                 case RoundingMode::roundToNearestAway:
-                    std::cout << "The rounding mode is round to nearest away." << std::endl;
+                    std::cout << "The rounding mode is round-to-nearest ties-to-away." << std::endl;
                     break;
                 case RoundingMode::roundUp:
                     std::cout << "The rounding mode is round up." << std::endl;
@@ -115,6 +119,9 @@ class Features {
                     break;
                 case RoundingMode::roundToZero:
                     std::cout << "The rounding mode is round to zero." << std::endl;
+                    break;
+                case RoundingMode::roundUnknown:
+                    std::cout << "The rounding mode cannot be determined." << std::endl;
                     break;
             }
             std::cout << "FMA size: " << FmaSize << std::endl;
