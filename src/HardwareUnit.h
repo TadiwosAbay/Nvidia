@@ -213,7 +213,7 @@ class HardwareUnit {
             A[0] = InputFormat::constant(1) + (InputFormat::constant(2^-2));
             B[0] = InputFormat::constant(1.0);
             A[1] = InputFormat::constant(1) + (ulp + ulp_2);
-            B[1] = InputFormat::constant(1.0);
+            B[1] = InputFormat::constant(-1.0);
 
             run_mfma_kernel();
             bool test1_result = (C[0] & last_3_bits);
@@ -223,7 +223,7 @@ class HardwareUnit {
             A[0] = InputFormat::constant(1) + (InputFormat::constant(2^-2));
             B[0] = InputFormat::constant(1.0);
             A[1] = InputFormat::constant(1) + ulp;
-            B[1] = InputFormat::constant(1.0);
+            B[1] = InputFormat::constant(-1.0);
 
             run_mfma_kernel();
             bool test2_result = (C[0] & last_3_bits);
@@ -241,7 +241,7 @@ class HardwareUnit {
             A[0] = InputFormat::constant(1) + (InputFormat::constant(2^-2));
             B[0] = InputFormat::constant(1.0);
             A[1] = InputFormat::constant(1) + (ulp_4 + ulp);
-            B[1] = InputFormat::constant(1.0);
+            B[1] = InputFormat::constant(-1.0);
 
             run_mfma_kernel();
             bool test3_result = (C[0] & last_3_bits);
@@ -250,7 +250,7 @@ class HardwareUnit {
             A[0] = InputFormat::constant(1) + (InputFormat::constant(2^-2));
             B[0] = InputFormat::constant(1.0);
             A[1] = InputFormat::constant(1) + (ulp_4 + ulp_2);
-            B[1] = InputFormat::constant(1.0);
+            B[1] = InputFormat::constant(-1.0);
 
             run_mfma_kernel();
             bool test4_result = (C[0] & last_3_bits);
