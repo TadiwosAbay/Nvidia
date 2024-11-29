@@ -7,7 +7,7 @@ using binary16 = IEEEFloatFormat<binary32_t, 11, 15>;
 using bfloat16 = IEEEFloatFormat<binary32_t, 8, 127>;
 
 int main() {
-    Features features(true, true, true, true, true, true, RoundingMode::roundToNearestEven, 4);
+    Features features(true, true, true, true, true, true, true, RoundingMode::roundToNearestEven, 4);
     const size_t M = 16, N = 16, K = 16;
     HardwareUnitSimulator<binary16, binary32> hw(M, N, K, features);
 

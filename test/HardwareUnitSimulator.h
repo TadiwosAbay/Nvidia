@@ -22,7 +22,9 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
 
     Features features;
 
-    size_t num_extra_bits = 1;
+    // TODO: This should be added to the Features class and used from there.
+    // Depends on having the tests for detecting this feature in HardwareUnit.
+    size_t num_extra_bits = 3;
 
     public:
         HardwareUnitSimulator(size_t M, size_t N, size_t K, Features features) :
@@ -88,6 +90,9 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
                 case RoundingMode::roundToNearestZero:
                     fpopts_output_t->round = CPFLOAT_RND_NZ;
                     break;
+                default:
+                    std::cerr << "Requested rounding mode cannot be simulated." << std::endl;
+                    exit(1);
             }
             fpopts_output_t->saturation = CPFLOAT_SAT_NO;
             if (features.getSubnormalsFromNormals() || features.getSubnormalsFromSubnormals())
