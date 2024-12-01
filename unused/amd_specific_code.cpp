@@ -53,17 +53,17 @@ __global__ void run_mfma(const input_t *A, const input_t *B, output_t *C,
     input_lane A_VGPR; // Stored by columns.
     input_lane B_VGPR; // Stored by rows.
     for(int i = 0; i < 4; ++i){
-        const int a_idx =  threadIdx.x * LDA      // consecutive threads cover 16 consecutive rows
+        const int a_idx = threadIdx.x * LDA      // consecutive threads cover 16 consecutive rows
                         + i                      // consecutive registers take consecutive columns
                         + threadIdx.y * 4;       // groups of 16 lanes skip 4 columns
         A_VGPR[i] = A[a_idx];
 
-        const int b_idx =  threadIdx.x            // consecutive threads cover 16 consecutive columns
+        const int b_idx = threadIdx.x            // consecutive threads cover 16 consecutive columns
                         + i * LDB                // consecutive registers take consecutive rows
                         + threadIdx.y * LDB * 4; // groups of 16 lanes skip 4 rows
         B_VGPR[i] = B[b_idx];
 
-        const int c_idx =  threadIdx.x            // consecutive threads cover 16 consecutive columns
+        const int c_idx = threadIdx.x            // consecutive threads cover 16 consecutive columns
                         + i * LDC                // consecutive registers take consecutive rows of 16 floats
                         + threadIdx.y * 4 * LDC; // groups of 16 lanes skip 4 rows
         C_VGPR[i] = C[c_idx];
