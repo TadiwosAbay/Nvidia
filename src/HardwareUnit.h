@@ -173,8 +173,8 @@ class HardwareUnit {
                     exit(1);
             }
 
-            output_t low_precision_result = A[0] - tmp;
-            output_t high_precision_result = OutputFormat::constant(A[0] - tmp) - OutputFormat::ulp(A[0] - tmp);
+            output_t low_precision_result = OutputFormat::constant(A[0]) - OutputFormat::constant(tmp);
+            output_t high_precision_result = low_precision_result - OutputFormat::ulp(low_precision_result);
 
             // Run first computation.
             A[1] = -test_1;
