@@ -22,10 +22,6 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
 
     Features features;
 
-    // TODO: This should be added to the Features class and used from there.
-    // Depends on having the tests for detecting this feature in HardwareUnit.
-    size_t num_extra_bits = 3;
-
     public:
         HardwareUnitSimulator(size_t M, size_t N, size_t K, Features features) :
                               HardwareUnit<InputFormat, OutputFormat>(M, N, K),
@@ -123,7 +119,7 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
             cpfloat(this->Bd.data(), this->Bd.data(), this->B_size, fpopts_input_t);
             cpfloat(this->Cd.data(), this->Cd.data(), this->C_size, fpopts_input_t);
 
-            int accumulator_precision = OutputFormat::getPrecision() + num_extra_bits;
+            int accumulator_precision = OutputFormat::getPrecision() + features.getNumberOfExtraBits();
 
             // Compute elements one by one.
             for (size_t i = 0; i < this->M; i++) {
@@ -154,7 +150,7 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
                         for (size_t k = 0; k < number_of_elements; k++)
                             accumulator += partial_products[k];
 
-                        // Round to output format.
+                        // Round to output format, using the normalise-then-round strategy.
                         cpfloat(&accumulator, &accumulator, 1, fpopts_output_t);
 
                         // Keep accumulation.

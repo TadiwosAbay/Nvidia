@@ -23,9 +23,8 @@ class Features {
         bool normalsFromSubnormals;
         bool subnormals_in_accumulator;
         bool multiplicationsAreExact;
-        bool extra_bit;
-        bool extra_bits_three_bit;
         RoundingMode rounding_mode;
+        size_t number_of_extra_bits;
         size_t FmaSize;
 
     public:
@@ -43,28 +42,27 @@ class Features {
         }
 
         RoundingMode getRoundingMode() {
-        return rounding_mode;
+            return rounding_mode;
+        }
+
+        size_t getNumberOfExtraBits() {
+            return number_of_extra_bits;
         }
 
         size_t getFmaSize() {
             return FmaSize;
         }
 
-        bool hasExtraBitsThreeBit() const {
-            return extra_bits_three_bit;
-        }
-
         Features(bool subnormalsFromSubnormals, bool subnormalsFromNormals, bool normalsFromSubnormals,
                bool subnormals_in_accumulator, bool multiplicationsAreExact,
-               bool extra_bit, bool extra_bits_three_bit, RoundingMode rounding_mode, size_t FmaSize) : 
+               RoundingMode rounding_mode, size_t number_of_extra_bits, size_t FmaSize) : 
             subnormalsFromSubnormals(subnormalsFromSubnormals),
             subnormalsFromNormals(subnormalsFromNormals),
             normalsFromSubnormals(normalsFromSubnormals),
             subnormals_in_accumulator(subnormals_in_accumulator),
             multiplicationsAreExact(multiplicationsAreExact),
-            extra_bit(extra_bit),
-            extra_bits_three_bit(extra_bits_three_bit),
             rounding_mode(rounding_mode),
+            number_of_extra_bits(number_of_extra_bits),
             FmaSize(FmaSize) {};
 
         void print_report() {
@@ -93,11 +91,7 @@ class Features {
             } else {
                 std::cout << "Multiplications are not exact." << std::endl;
             }
-            if (extra_bit) {
-                std::cout << "Accumulator has one extra bit." << std::endl;
-            } else {
-                std::cout << "Accumulator does not have extra bits." << std::endl;
-            }
+            std::cout << "Number of extra bits in accumulator: " << number_of_extra_bits << std::endl;
             switch (rounding_mode) {
                 case RoundingMode::roundNotFaithful:
                     std::cout << "Rounding is not faithful." << std::endl;
@@ -133,9 +127,8 @@ class Features {
                    (lhs.normalsFromSubnormals == rhs.normalsFromSubnormals) &&
                    (lhs.subnormals_in_accumulator == rhs.subnormals_in_accumulator) &&
                    (lhs.multiplicationsAreExact == rhs.multiplicationsAreExact) &&
-                   (lhs.extra_bit == rhs.extra_bit) &&
-                   (lhs.extra_bits_three_bit == rhs.extra_bits_three_bit) &&
                    (lhs.rounding_mode == rhs.rounding_mode) &&
+                   (lhs.number_of_extra_bits == rhs.number_of_extra_bits) &&
                    (lhs.FmaSize == rhs.FmaSize);
         }
 
