@@ -29,7 +29,11 @@ endif()
 # Build the tests.
 option (BUILD_TESTS "Build tests" True)
 if (BUILD_TESTS)
+    add_custom_target(CPFloat
+        COMMAND make lib
+        WORKING_DIRECTORY ../deps/cpfloat)
     add_executable(runtests test/runtests.cpp)
+    add_dependencies(runtests CPFloat)
     target_include_directories(runtests PRIVATE ${PROJECT_SOURCE_DIR}/src)
     target_include_directories(runtests PRIVATE ${PROJECT_SOURCE_DIR}/deps/cpfloat/build/include)
     target_link_libraries(runtests PRIVATE cpfloat)
