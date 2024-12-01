@@ -117,7 +117,7 @@ class HardwareUnitSimulator : public HardwareUnit<InputFormat, OutputFormat> {
             // Round to input format using round to nearest even.
             cpfloat(this->Ad.data(), this->Ad.data(), this->A_size, fpopts_input_t);
             cpfloat(this->Bd.data(), this->Bd.data(), this->B_size, fpopts_input_t);
-            cpfloat(this->Cd.data(), this->Cd.data(), this->C_size, fpopts_input_t);
+            cpfloat(this->Cd.data(), this->Cd.data(), this->C_size, fpopts_output_t);
 
             int accumulator_precision = OutputFormat::getPrecision() + features.getNumberOfExtraBits();
 
