@@ -161,12 +161,12 @@ class HardwareUnit {
             input_t test_1, test_2;
             switch (rounding_mode) {
                 case RoundingMode::roundToNearestEven:
-                    test_1 = tmp + 3 * InputFormat::ulp(tmp);
-                    test_2 = tmp + 5 * InputFormat::ulp(tmp);
+                    test_1 = tmp + InputFormat::constant(3) * InputFormat::ulp(tmp);
+                    test_2 = tmp + InputFormat::constant(5) * InputFormat::ulp(tmp);
                     break;
                 case RoundingMode::roundToZero:
-                    test_1 = tmp + 1 * InputFormat::ulp(tmp);
-                    test_2 = tmp + 2 * InputFormat::ulp(tmp);
+                    test_1 = tmp + InputFormat::constant(1) * InputFormat::ulp(tmp);
+                    test_2 = tmp + InputFormat::constant(2) * InputFormat::ulp(tmp);
                     break;
                 default:
                     std::cerr << "Requested rounding mode cannot be simulated." << std::endl;
@@ -174,7 +174,7 @@ class HardwareUnit {
             }
 
             output_t low_precision_result = A[0] - tmp;
-            output_t high_precision_result = (A[0] - tmp) - OutputFormat::ulp(A[0] - tmp);
+            output_t high_precision_result = OutputFormat::constant(A[0] - tmp) - OutputFormat::ulp(A[0] - tmp);
 
             // Run first computation.
             A[1] = -test_1;
