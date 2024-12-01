@@ -29,11 +29,12 @@ endif()
 # Build the tests.
 option (BUILD_TESTS "Build tests" True)
 if (BUILD_TESTS)
-    add_custom_target(CPFloat
-        COMMAND make lib
-        WORKING_DIRECTORY ../deps/cpfloat)
+    add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/deps/cpfloat/build/lib/ ${PROJECT_SOURCE_DIR}/deps/cpfloat/build/include/
+                   COMMAND make lib
+                   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/deps/cpfloat)
+    add_custom_target(cpfloat_build DEPENDS ${PROJECT_SOURCE_DIR}/deps/cpfloat/build/lib/ ${PROJECT_SOURCE_DIR}/deps/cpfloat/build/include/)
     add_executable(runtests test/runtests.cpp)
-    add_dependencies(runtests CPFloat)
+    add_dependencies(runtests cpfloat_build)
     target_include_directories(runtests PRIVATE ${PROJECT_SOURCE_DIR}/src)
     target_include_directories(runtests PRIVATE ${PROJECT_SOURCE_DIR}/deps/cpfloat/build/include)
     target_link_libraries(runtests PRIVATE cpfloat)
